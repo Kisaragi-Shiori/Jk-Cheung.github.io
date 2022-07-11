@@ -1,0 +1,171 @@
+# 图标
+favicon: /img/favicon.png
+
+# 标题
+banner:
+  enable: true
+  title: 紅葉の森
+  border: false
+  cloud:
+    enable: true
+    color: "white"
+  go_down:
+    enable: true
+    icon: icon-arrow-down-s-line
+
+# 颜色
+colors:
+  primary: "#0078E7"
+  bg: "#FFC0CB"
+  selection_bg: "#FF1493" # 选取文字时的背景色
+  # 标签云中标签的起始色和结束色
+  # tag_start_color:
+  # tag_end_color:
+
+# 公告
+notice:
+  enable: true
+  content: 由于 Hexo 对数学公式的支持问题, 删除了笔记内容
+
+# 亮暗模式
+# 可选 light | dark | auto | time
+mode: auto
+
+# 指针
+cursor:
+  enable: true
+  default: https://cdn.jsdelivr.net/gh/YunYouJun/cdn/css/md-cursors/pointer.cur
+  pointer: https://cdn.jsdelivr.net/gh/YunYouJun/cdn/css/md-cursors/link.cur
+  text: https://cdn.jsdelivr.net/gh/YunYouJun/cdn/css/md-cursors/text.cur
+
+# 头像
+avatar:
+  enable: true
+  url: /img/avatar.png
+  rounded: true
+  opacity: 1
+  status:
+    enable: true
+    emoji: 📖
+    message: 恋爱与学习
+
+# 打赏
+reward:
+  enable: true
+  icon: icon-hand-coin-line
+  comment: 我很可爱，请给我钱
+  methods:
+    - name: 支付宝
+      path: /img/alipay.jpg
+      color: "#00A3EE"
+      icon: icon-alipay-line
+    #- name: QQ 支付
+      #path: https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/donate/qqpay-qrcode.png
+      #color: "#12B7F5"
+      #icon: icon-qq-line
+    - name: 微信支付
+      path: /img/wechatpay.png
+      color: "#2DC100"
+      icon: icon-wechat-pay-line
+
+# 起始年份
+footer:
+  since: 2022
+
+# 代码复制按钮
+codeblock:
+  copy_btn: true
+
+# 版权
+creative_commons:
+  license: by-nc-sa
+  post: true
+  language: deed.zh
+  clipboard: true
+
+# 评论系统
+comment:
+  candidates:
+    - waline
+    # - giscus
+  tips:
+    - 请文明评论哦~
+waline:
+  enable: true
+  serverURL: https://waline-server-neon.vercel.app/
+  visitor: false
+  comment: true
+
+# 背景
+bg_image:
+  enable: true
+  url: /img/bg_light1.jpg
+  dark: /img/bg_dark1.jpg
+  # blur: 30px # 设置背景模糊程度
+  opacity: 0.8
+
+wordcloud:
+  enable: true
+  height: 350
+
+# 侧边栏
+pages:
+  - name: 我的小伙伴们
+    url: /links/
+    icon: icon-genderless-line
+    color: dodgerblue
+  - name: 资源
+    url: /resources/
+    icon: icon-cloud-line
+    color: green
+  - name: 喜欢的女孩子
+    url: /girls/
+    icon: icon-women-line
+    color: hotpink
+
+# 留言板
+menu:
+  custom:
+    title: 留言板
+    path: /about/#comment
+    icon: icon-clipboard-line
+
+# 老婆
+girls:
+  enable: true
+
+# 百度
+baidu_push: true
+
+# 社交
+social:
+  - name: RSS
+    link: /atom.xml # config.feed.path
+    icon: icon-rss-line
+    color: orange
+  - name: GitHub
+    link: https://github.com/Jk-Cheung
+    icon: icon-github-line
+    color: "#6e5494"
+  - name: E-Mail
+    link: mailto:jk.momiji1230@gmail.com
+    icon: icon-mail-line
+    color: "#8E71C1"
+
+# 公式
+katex:
+  copy_tex: true
+  global: false
+mathjax:
+  enable: true
+  per_page: false
+  
+# 卜算子
+busuanzi:
+  enable: true
+  site_uv: true
+  site_uv_icon: icon-user-line
+  site_pv: true
+  site_pv_icon: icon-eye-line
+  page_pv: true
+  page_pv_icon: icon-eye-line
