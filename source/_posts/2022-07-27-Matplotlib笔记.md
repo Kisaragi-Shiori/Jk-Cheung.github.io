@@ -13,6 +13,8 @@ tags:
 - 数据分析
 ---
 
+本文将介绍一些常用的 Matplotlib 的绘图方法。
+
 <!-- more -->
 
 ## 导入与基本设置
@@ -391,5 +393,5 @@ plt.violinplot(dataset, positions=None, vert=True, widths=0.5, showmeans=False, 
 - `showextrema: bool`：是否显示最值，默认为 `Ture`；
 - `showmedians: bool`：是否显示中位数，默认为 `False`；
 - `points: int`：估计高斯核密度的点数，默认为 `100`；
-- `bw_method: str, scalar, callable`：估算带带宽的方法。
+- `bw_method: str, scalar, callable`：估算带宽的方法。
 
