@@ -1,0 +1,198 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="紅葉"><meta name="copyright" content="紅葉"><meta name="generator" content="Hexo 6.0.0"><meta name="theme" content="hexo-theme-yun"><title>Git笔记 | 紅葉の森</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/star-markdown-css@0.3.3/dist/yun/yun-markdown.min.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/prism-theme-vars/base.css"><script src="https://fastly.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>function initScrollReveal() {
+  [".post-card",".markdown-body img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+}
+document.addEventListener("DOMContentLoaded", initScrollReveal);
+document.addEventListener("pjax:success", initScrollReveal);
+</script><link rel="icon" type="image/png" href="/img/favicon.png"><link rel="mask-icon" href="/img/favicon.png" color="#0078E7"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fastly.jsdelivr.net/npm/" crossorigin><script id="yun-config">
+    window.Yun = {}
+    window.CONFIG = {"hostname":"jk-momiji.com","root":"/","title":"紅葉の森","version":"1.10.6","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.yunyoujun.cn/img/avatar/none.jpg","say":{"api":"https://el-bot-api.vercel.app/api/words/young"},"fireworks":{"colors":null},"vendors":{"host":"https://fastly.jsdelivr.net/npm/","darken":"https://fastly.jsdelivr.net/npm/darken@1.5.0"}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/hexo-theme-yun.js" type="module"></script><script>(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();</script><meta name="description" content="Git 是世界上最先进的分布式版本控制系统，学习并掌握 Git 的基本功能是代码人的基本素养（除非用其他的版本控制系统）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git笔记">
+<meta property="og:url" content="http://jk-momiji.com/Note-of-Git/">
+<meta property="og:site_name" content="紅葉の森">
+<meta property="og:description" content="Git 是世界上最先进的分布式版本控制系统，学习并掌握 Git 的基本功能是代码人的基本素养（除非用其他的版本控制系统）。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-17T00:46:50.000Z">
+<meta property="article:modified_time" content="2022-08-22T13:13:55.854Z">
+<meta property="article:author" content="紅葉">
+<meta property="article:tag" content="编程">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary"><script>(function() {
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const setting = localStorage.getItem('darken-mode') || 'auto'
+  if (setting === 'dark' || (prefersDark && setting !== 'light'))
+    document.documentElement.classList.toggle('dark', true)
+})()</script></head><body><script src="https://code.iconify.design/2/2.1.1/iconify.min.js"></script><script>// Define global variable
+IconifyProviders = {
+  // Empty prefix: overwrite default API provider configuration
+  '': {
+    // Use custom API first, use Iconify public API as backup
+    resources: [
+        'https://api.iconify.design',
+    ],
+    // Wait for 1 second before switching API hosts
+    rotate: 1000,
+  },
+};</script><script defer src="https://fastly.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><span class="icon iconify" data-icon="ri:list-ordered"></span></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><span class="icon iconify" data-icon="ri:passport-line"></span></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="紅葉"><img width="96" loading="lazy" src="/img/avatar.png" alt="紅葉"><span class="site-author-status" title="努力提升">📖</span></a><div class="site-author-name"><a href="/about/">紅葉</a></div><span class="site-name">紅葉の森</span><sub class="site-subtitle">记录每一个思想的火花</sub><div class="site-description">Cogito, ergo sum.</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:home-4-line"></span></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:archive-line"></span></span><span class="site-state-item-count">23</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:folder-2-line"></span></span><span class="site-state-item-count">7</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="site-state-item-count">29</span></a></div><a class="site-state-item hty-icon-button" href="/about/#comment" title="留言板"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:clipboard-line"></span></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><span class="icon iconify" data-icon="ri:rss-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Jk-Cheung" title="GitHub" target="_blank" style="color:#6e5494"><span class="icon iconify" data-icon="ri:github-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:jk.momiji1230@gmail.com" title="E-Mail" target="_blank" style="color:#8E71C1"><span class="icon iconify" data-icon="ri:mail-line"></span></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="我的小伙伴们" style="color:dodgerblue"><span class="icon iconify" data-icon="ri:genderless-line"></span></a><a class="links-item hty-icon-button" href="/resources/" title="资源" style="color:green"><span class="icon iconify" data-icon="ri:cloud-line"></span></a><a class="links-item hty-icon-button" href="/girls/" title="喜欢的女孩子" style="color:hotpink"><span class="icon iconify" data-icon="ri:women-line"></span></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><span class="icon iconify" data-icon="ri:contrast-2-line"></span></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Git-%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">Git 的安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Git-%E4%B8%8E-GitHub-%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">Git 与 GitHub 的配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Git-%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-number">2.1.</span> <span class="toc-text">Git 的配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GitHub-%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-number">2.2.</span> <span class="toc-text">GitHub 的配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E5%BA%93"><span class="toc-number">3.</span> <span class="toc-text">版本库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E5%BA%93%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">3.1.</span> <span class="toc-text">版本库的创建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E5%BA%93%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">3.2.</span> <span class="toc-text">版本库的基本使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">4.</span> <span class="toc-text">远程仓库的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86"><span class="toc-number">5.</span> <span class="toc-text">分支管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%94%AF%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">5.1.</span> <span class="toc-text">分支的基本操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%B2%E7%AA%81%E8%A7%A3%E5%86%B3"><span class="toc-number">5.2.</span> <span class="toc-text">冲突解决</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%94%AF%E7%9A%84%E5%90%88%E5%B9%B6%E6%A8%A1%E5%BC%8F"><span class="toc-number">5.3.</span> <span class="toc-text">分支的合并模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%94%AF%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">5.4.</span> <span class="toc-text">分支的基本使用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bug-%E4%BF%AE%E5%A4%8D"><span class="toc-number">5.5.</span> <span class="toc-text">Bug 修复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E5%8D%8F%E4%BD%9C"><span class="toc-number">5.6.</span> <span class="toc-text">远程协作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E5%9B%9E%E6%BB%9A"><span class="toc-number">6.</span> <span class="toc-text">版本回滚</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E5%9B%9E%E9%80%80%EF%BC%88reset%EF%BC%89"><span class="toc-number">6.1.</span> <span class="toc-text">版本回退（reset）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E8%BF%98%E5%8E%9F%EF%BC%88revert%EF%BC%89"><span class="toc-number">6.2.</span> <span class="toc-text">版本还原（revert）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E7%AD%BE%E7%AE%A1%E7%90%86"><span class="toc-number">7.</span> <span class="toc-text">标签管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E5%BF%BD%E7%95%A5%E6%96%87%E4%BB%B6"><span class="toc-number">8.</span> <span class="toc-text">设置忽略文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-number">9.</span> <span class="toc-text">后记</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="http://jk-momiji.com/Note-of-Git/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="紅葉"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="紅葉の森"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Git笔记</h1><div class="post-meta"><div class="post-time"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-line"></span></span> <time title="创建时间：2022-08-17 08:46:50" itemprop="dateCreated datePublished" datetime="2022-08-17T08:46:50+08:00">2022-08-17</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-2-line"></span></span> <time title="修改时间：2022-08-22 21:13:55" itemprop="dateModified" datetime="2022-08-22T21:13:55+08:00">2022-08-22</time></div><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><span class="icon iconify" data-icon="ri:eye-line"></span> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><span class="icon iconify" data-icon="ri:folder-line"></span></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">学习笔记</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/%E7%BC%96%E7%A8%8B/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">编程</span></a><a class="tag-item" href="/tags/Git/" style="--text-color:#F14E32"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">Git</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><p>Git 是世界上最先进的分布式版本控制系统，学习并掌握 Git 的基本功能是代码人的基本素养（除非用其他的版本控制系统）。</p>
+<span id="more"></span>
+
+<h2 id="Git-的安装"><a href="#Git-的安装" class="headerlink" title="Git 的安装"></a>Git 的安装</h2><p>在 Linux 系统上安装 Git 比较方便，可以尝试输入 Git 命令，有一些系统是自带 Git，如果没有，大部分系统会提示你安装方法，比如 Ubuntu 中就可以使用命令 <code>sudo apt-get install git</code> 来进行安装。</p>
+<p>而在 Mac 上，我没用过，所以请自行 Google。</p>
+<p>在 Windows 上需要去 Git 的官网下载并安装，或者可以下载 GitHub Desktop 直接傻瓜式操作，不过不建议（因为有很多东西需要在 Terminal 调用 Git，而 GitHub Desktop 并不会安装 Git）。</p>
+<p>Git 安装成功后，打开 Terminal 或者 Git Bash，输入 <code>git -v</code> 查看 Git 版本，如果出现版本号则说明 Git 安装成功。</p>
+<h2 id="Git-与-GitHub-的配置"><a href="#Git-与-GitHub-的配置" class="headerlink" title="Git 与 GitHub 的配置"></a>Git 与 GitHub 的配置</h2><h3 id="Git-的配置"><a href="#Git-的配置" class="headerlink" title="Git 的配置"></a>Git 的配置</h3><p>Git 安装完成后，要进行一定的配置才能够使用。</p>
+<p>首先是设置名字和 Email 地址，在 Terminal 输入</p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">git config --global user.name &#39;YourName&#39;
+git config --global user.email &#39;YourEmail&#39;</code></pre>
+
+<p>这里的 <code>--global</code> 参数表示该配置用于本机器的所有仓库，当然也可以分仓库进行配置。</p>
+<h3 id="GitHub-的配置"><a href="#GitHub-的配置" class="headerlink" title="GitHub 的配置"></a>GitHub 的配置</h3><p>GitHub 是一个免费的开源社区，可以将其看作一个免费的远程仓库，关于多人协作后面会提到。</p>
+<p>使用 GitHub 需要先注册一个 GitHub 的账号，然后设置 SSH 将其与本地进行连接。</p>
+<p>在 Terminal 输入命令 <code>ssh-keygen -t ed25519 -C &quot;your_email@example.com&quot;</code>，之后会提示设置路径和密码，可以一路 Enter 跳过。之后 SSH key 就会在 ~&#x2F;.ssh 文件夹中生成。该文件夹中有两个 Key，分别为 id_rsa 和 id_rsa.pub，前者是私钥，后者是公钥。私钥一定要自行保管，不能透露给他人，而公钥是我们进行连接所要使用的。</p>
+<p>打开 GitHub 中的个人设置（点击主页右上角头像，出现的列表中的 Settings），其中有一个 SSH and GPG keys，选择该选项后点击 New SSH key 添加公钥即可。</p>
+<p>添加完成后打开 Terminal ，输入命令 <code>ssh -T git@github.com</code>，会出现类似如下的警告</p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">&gt; The authenticity of host &#39;github.com (IP ADDRESS)&#39; can&#39;t be established.
+&gt; RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+&gt; Are you sure you want to continue connecting (yes&#x2F;no)?</code></pre>
+
+<p>输入 <code>yes</code> 后就可以看到如下输出</p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">&gt; Hi username! You&#39;ve successfully authenticated, but GitHub does not
+&gt; provide shell access.</code></pre>
+
+<p>其中 username 是你在 GitHub 中的用户名。</p>
+<h2 id="版本库"><a href="#版本库" class="headerlink" title="版本库"></a>版本库</h2><h3 id="版本库的创建"><a href="#版本库的创建" class="headerlink" title="版本库的创建"></a>版本库的创建</h3><p>上面的配置完成后，就可以快乐地使用 Git 和 GitHub 了。首先我们需要创建一个版本库（repository，下称 repo 或仓库），一般来说我们倾向于在 GitHub 上创建 repo 并 pull 到本地。这里先介绍在本地创建 repo。</p>
+<p>首先在 Terminal 打开要创建 repo 的文件夹，输入 <code>git init</code> 即可将<strong>该文件夹</strong>初始化为一个 repo，然后 git 就可以对该文件夹中的改动进行追踪了。</p>
+<p>当然，也可以使用命令 <code>git init dir</code> 在当前目录创建一个名为 dir 的文件并将其初始化为一个 repo。</p>
+<h3 id="版本库的基本使用"><a href="#版本库的基本使用" class="headerlink" title="版本库的基本使用"></a>版本库的基本使用</h3><p>创建好 repo 后使用 <code>ls</code> 命令来查看变化，会发现什么都没有。因为 <code>git init</code> 生成了一个名为 .git 的文件，而以 「.」开头的文件均为<strong>隐藏</strong>的，因此我们需要使用 <code>ls -a</code> 命令来显示所有文件。</p>
+<p>使用命令 <code>git add filename</code> 将名为 filename 的文件添加到暂存区，当然，可以使用 <code>git add -A</code> 来添加所有文件到暂存区，这样使用命令 <code>git status</code> 就可以看到现在的状态是没有提交。使用命令 <code>git commit -m &#39;msg&#39;</code> 进行提交，其中 msg 是描述此次提交的文字。然后就会看到这样的输出</p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">[master (root-commit) df2d7bf] this is a msg
+ 1 file changed, 1 insertion(+), 0 deletions(-)
+ create mode 100644 test.txt</code></pre>
+
+<p>显示了这次提交的改动——一个文件修改，一个文件内容添加，零个文件内容删除，并创建了一个 test.txt 的文件。而需要注意第一行的 <code>df2d7bf</code>，这是本次提交的 ID 的前面 7 位，其全长十分长，可以使用 <code>git log</code> 命令来查看。如果是删除则为 <code>delete mode 100644 test.txt</code>。之后新建、删除或修改一些文件，再输入命令 <code>git status</code> 就可以显示现在工作区和暂存区的状态，而 <code>git diff</code> 则可以显示工作区与暂存区的差异。</p>
+<p>下面将区分 git 中的三个重要概念：工作区（Working Directory）、暂存区（Stage, Index）、版本库（Repository）。</p>
+<p>工作区是 init 为 repo 的文件夹，就是我们进行作业的目录（<strong>不包括隐藏的文件</strong>），其与普通的资源管理器没有区别。</p>
+<p>而暂存区则是储存我们的改动的区域。我们每次要提交的文件均记录在暂存区中，正如其名，暂存区是暂时储存文件版本的，你对文件的的下一次记录会<strong>覆盖</strong>这次记录，比如在 test.txt 文件中添加了一行文字后进行 add，然后再添加一行进行 add，这时不会显示你分两步添加了两行，而是一次添加了两行。想要把暂存区的改动保存为一个版本需要进行提交，在上一例中如果在添加第一行后进行提交，然后再进行添加第二行，就会发现改动是添加了一行。</p>
+<p>版本库是储存我们的每个提交的版本的地方，它就是 .git 文件夹，<strong>不要对其进行任何改动</strong>，否则会出现不可挽回的错误（除非你想把这个版本库删除，直接删除 .git 文件夹即可）。版本库中包含了我们以往提交的所有版本信息，以及暂存区和一些分支。</p>
+<p>下面是一些常用的 git 命令</p>
+<ul>
+<li>git init：在当前目录初始化一个 repo；</li>
+<li>git init dir：在当前目录下新建一个名为 dir 的文件夹并在其中初始化一个 repo；</li>
+<li>git add file1 file2 …：将 file1, file2, … 添加到暂存区；</li>
+<li>git add -A：将所有文件添加到暂存区；</li>
+<li>git add .：将当前目录的所有文件添加到暂存区；</li>
+<li>git rm file1 file2 …：删除工作区的 file1, file2, … 文件并添加此次删除到暂存区；</li>
+<li>git rm –cached file：停止追踪该文件并将其在暂存区删除，但是不删除工作区的文件；</li>
+<li>git mv file1, file2：将 file1 移动到 file2 的位置并添加到暂存区，常用该命令进行改名；</li>
+<li>git commit -m ‘msg’：提交暂存区文件到 repo，其中 msg 为对提交的说明；</li>
+<li>git commit file1 file2 … -m ‘msg’：提交暂存区的某些文件到 repo；</li>
+<li>git commit -a -m ‘msg’：直接提交工作区已追踪的文件的变化到 repo（未追踪的不会提交）；</li>
+<li>git commit -am ‘msg’：同上；</li>
+<li>git commit –amend -m ‘msg’：重做上次提交，即用新的提交<strong>覆盖</strong>上次提交，可用来更改 msg；</li>
+<li>git commit –amend file1 file2 …：重做上次提交，并只包括指定文件的变化；</li>
+<li>git log：显示历史提交；</li>
+<li>git log -p：显示历史提交及内容变更；</li>
+<li>git log -5：显示最近 5 次提交；</li>
+<li>git diff：显示工作区与暂存区的区别，在后面加上 file 会显示该 file 的区别；</li>
+<li>git diff –cached：显示暂存区与上一次提交的区别，在后面加上 file 会显示该 file 的区别；</li>
+<li>git checkout – file：丢弃工作区文件 file 的修改</li>
+</ul>
+<h2 id="远程仓库的使用"><a href="#远程仓库的使用" class="headerlink" title="远程仓库的使用"></a>远程仓库的使用</h2><p>在本地创建完 repo 后，一般为了团队协作我们需要将本地 repo 上传到 GitHub，然后让其他人进行拉取（pull）。为了将 repo 上传到 GitHub，我们需要在 GitHub 上创建一个远程 repo。首先打开 GitHub，然后在左边有一个绿色按钮（New），点击即可进行远程 repo 的建立。之后就是将本地 repo 和远程 repo 进行连接，打开 Terminal，输入如下命令</p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">git remote add origin git@github.com:your_name&#x2F;your_repo.git</code></pre>
+
+<p>命令中的 <code>git@github.com:your_name/your_repo.git</code> 在创建远程 repo 后在网页上有显示，进行更换即可。这里的 origin 可以换成其他的名称，不过一般都设置成 origin 表示是一个远程 repo。</p>
+<p>一般来说，我们的本地 repo 默认分支为 master，远程仓库默认名为 origin，这样我们就可以使用下列命令进行推送（push）</p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">git push -u origin master</code></pre>
+
+<p>第一次使用时，会出现一个 SSH 的警告，输入 yes 即可。</p>
+<p>只有第一次推送需要使用参数 <code>-u</code> 来将本地的 master 分支和远程生成的 master 进行关联，之后只需要使用 <code>git push origin master</code> 进行 push。</p>
+<p>而从远程拉取（pull）主要有两种方法。这里我们先介绍一种最简单的，就是使用 <code>git pull</code> 来将远程仓库的内容直接拉取到本地并进行合并，使用后工作区的文件会立刻变为远程仓库最新的文件（并不准确，分支部分会更加详细地介绍）。</p>
+<p>下面是一些常用的远程仓库命令</p>
+<ul>
+<li>git fetch origin：将远程仓库 origin 的内容拉取到本地远程仓库；</li>
+<li>git remote -v：查看所有远程仓库；</li>
+<li>git remote show origin：查看远程仓库 origin 的信息；</li>
+<li>git remote add origin url：从 url 添加新的远程仓库 origin；</li>
+<li>git pull origin master：拉取远程仓库 origin 的内容并与本地分支 master 合并；</li>
+<li>git push origin master：上传本地分支 master 到远程仓库 origin；</li>
+<li>git push origin master –force：强行上传，即使有冲突；</li>
+<li>git push origin：将所有本地分支上传到远程仓库。</li>
+</ul>
+<h2 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h2><h3 id="分支的基本操作"><a href="#分支的基本操作" class="headerlink" title="分支的基本操作"></a>分支的基本操作</h3><p>在 Git 中，我们的每次提交都会使版本向前移动一次，而这些版本构成了一条时间线，我们称之为「主分支」，即 master 分支。在分支中存在一个指针指向本分支的最新文件，如 mater 分支的指针为 master。</p>
+<p>如果我们想对 master 分支文件进行更改，但是又害怕更改会破坏 master 分支的文件结构，如多人协作的时候更改一个文件可能会导致其他人的某些相关联的文件出问题；又或者是仅仅用不同分支来储存不同的文件。两个分支之间互不干扰。</p>
+<p>在 Git 中还有一个指针 HEAD，指向当前工作的分支。因此我们主要有两类指针，一是指向分支提交的指针，另一个是指向当前分支指针的指针。在理解了两个指针后，我们就可以进行分支的操作了。</p>
+<p>在 master 分支中，如果我们想要更改某个文件而不影响该分支，我们可以使用命令 <code>git switch -c newbranch</code> 来创建一个名为 newbranch 的分支。该分支的内容与 master 的内容完全一致。因此，新分支只是<strong>一个指针</strong>，和 master 分支同样指向最新的提交，因此我们可以十分快速地进行分支的切换，即只需将 HEAD 指针从 master 指针指向 newbranch 指针。</p>
+<p>而我们在 newbranch 分支中可以进行和 master 分支中一样的修改、提交，在修改提交后 master 分支的指向不变，而 newbranch 分支将指向最新的提交。因此我们使用命令 <code>git switch master</code> 来切换到 master 分支，这时我们就会发现之前的更改都不见了。 上文中 <code>git switch -c newbranch</code> 命令其实是 <code>git branch newbranch</code> 和 <code>git switch newbranch</code> 两个命令的结合，前者是用于创建新的分支，而后者是切换分支。其中 <code>-c</code> 是 <code>--create</code> 的简写。我们也可以使用 <code>git checkout -b newbranch</code> 来创建并切换分支，用 <code>git checkout newbranch</code> 来切换分支。</p>
+<p>在 newbranch 分支中，我们做完需要做的工作后，可能需要将 newbranch 分支的更改合并到 master 中去。这时就需要用到 Git 的合并：首先切换到 master 分支，然后使用命令 <code>git merge newbranch</code> 进行合并。这会使 newbranch 分支变更的内容合并到 master 中，当然可能出现冲突问题，这一点我们下面再讲。</p>
+<p>在合并了分支后，我们能够使用命令 <code>git branch -d newbranch</code> 来删除分支，这样就完成了简单的分支工作流程。如果我们在合并之前就需要将该分支删除，上面的命令是行不通的，这时需要使用命令 <code>git branch -D newbranch</code> 来进行删除。</p>
+<p>而如果我们在某分支上的工作并未完成，却需要切换到另一个分支上进行工作，这时就需要暂时将工作区储存起来，因为 Git 无法在切换分支时保存当前分支的工作区和暂存区。使用命令 <code>git stash</code> 即可将现有的工作区暂时储存，下次需要使用的时候用命令 <code>git stash list</code> 可以查看暂存区的文件，然后使用 <code>git stash apply</code> 或 <code>git stash pop</code> 进行恢复，前者恢复后不会删除 stash 记录，而后者会进行删除。如果想要直接删除可使用命令 <code>git stash drop</code>。当然，也可以进行多次 stash，如果想要将上面的命令运用在某个 stash 上，只需输入 <code>git stash apply stash@&#123;0&#125;</code> 即可，其中 apply 和 0 也可换成别的命令或参数。</p>
+<h3 id="冲突解决"><a href="#冲突解决" class="headerlink" title="冲突解决"></a>冲突解决</h3><p>如果我们在 master 和 newbranch 分支同时进行了提交，也就是说 newbranch 分支并非领先 master 分支一个（或数个）版本，那么我们就可能出现合并冲突</p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">Auto-merging file
+CONFLICT (content): Merge conflict in file
+Automatic merge failed; fix conflicts and then commit the result.</code></pre>
+
+<p>这样 git 就会将修改合并，显示在产生冲突的文件中。使用 <code>git status</code> 也可以查看冲突文件。</p>
+<p>我们打开冲突文件后，就会发现 Git 使用 <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>，<code>=======</code>，<code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> 这三行来标记不同分支的内容，我们修改保存后提交即可完成分支合并。</p>
+<h3 id="分支的合并模式"><a href="#分支的合并模式" class="headerlink" title="分支的合并模式"></a>分支的合并模式</h3><p>在上一节中我们使用的合并方式被称为 Fast Forward 模式，这种模式下我们会直接将 master 分支的指针指向 newbranch，这个合并是十分迅速的，但是这种合并方式是不会记录分支合并的操作的。</p>
+<p>如果我们想要保留合并记录，我们需要添加参数 <code>--no-ff</code> 和 <code>-m</code>，即使用命令 <code>git merge --no-ff -m &#39;your msg&#39; newbranch</code>，其中 <code>&#39;your msg&#39;</code> 是合并时的描述，因为该合并模式会在合并时进行一次 commit，需要 <code>-m</code> 参数。</p>
+<p>使用命令 <code>git log --graph --pretty=oneline --abbrev-commit</code> 可以以图的形式展示提交和分支处理。</p>
+<p>还有一个命令 <code>git rebase</code>，可以将看起来混乱的分支提交合并等转换成一条直线，我也不太理解有什么用。这样虽然会使 commit 的历史变得更为美观，但是会导致原始数据的丢失，因此<strong>不要在远程仓库已存在且有其他人在其上工作的时候进行此操作</strong>。如果只是私人仓库，或者第一次提交给远程仓库，可以为了美观而使用这个命令。</p>
+<h3 id="分支的基本使用方法"><a href="#分支的基本使用方法" class="headerlink" title="分支的基本使用方法"></a>分支的基本使用方法</h3><p>一般来说，我们使用分支管理是为了保证代码的稳定性，即 master 分支的稳定。而我们的每次修改都应在分支上进行，这样就会保证 master 分支不被影响，开发出现错误的话也不会出现太大的损失。而如果我们是进行多人协作的话，我们需要一个 dev 分支来保存总的开发，在每一个大版本开发完成后将 dev 分支 merge 到 master 分支中。而每个人在进行开发时就从 dev 分支上创建个人的分支，以防止互相影响，在工作中 merge 到 dev 分支上即可。</p>
+<p>同时，对于每一个新功能，或者修改 Bug，都建议在分支上进行工作，然后 merge 到 master 上。</p>
+<h3 id="Bug-修复"><a href="#Bug-修复" class="headerlink" title="Bug 修复"></a>Bug 修复</h3><p>如果在 master 中发现 Bug，我们可以创建一个基于 master 的分支然后在其上进行修改，之后 merge 一下即可。但是在 master 中存在的 Bug 也会在 dev 和个人分支中存在，因此我们需要在修复完 Bug 后将 master 上的修改应用到 dev 上。我们只需要记下 master 中修改 Bug 的那次提交的 ID，比如 df2d7bf，然后在 dev 分支使用命令 <code>git cherry-pick df2d7bf</code> 即可将 master 中的修改应用到 dev 分支。注意，该命令只是修改 master df2d7bf 提交中修改过的文件，而其他文件并不会受影响。</p>
+<h3 id="远程协作"><a href="#远程协作" class="headerlink" title="远程协作"></a>远程协作</h3><p>当其他人想要参与我们的项目的时候，我们一是可以将对方的 SSH key 添加到我们 GitHub 上，但是这样就将自己 GitHub 上所有 repo 的读写权力都分享出去了，因此不建议这样做。安全的方法是在 repo 的设置中的 Collaborators 添加对方，这样对方就可以对该 repo 进行修改了。</p>
+<p>当对方 clone 远程仓库时，只会 clone master 分支，如果我们需要同时在 dev 分支上进行修改，那么就需要使用命令 <code>git switch -c dev origin/dev</code> 来将远程仓库（origin）的 dev 分支 clone 到本地的 dev 分支。如果我们的本地仓库并未与远程仓库进行链接，需要使用 <code>git branch --set-upstream-to=origin/dev dev</code> 来将 origin&#x2F;dev 和 dev 进行链接。</p>
+<p>如果一个人修改了 dev 分支并 push 到了远程仓库，同时我们这边也进行了修改，但是还未进行 push。此时我们使用 <code>git push origin dev</code> 可能是行不通的，此时我们需要先将远程仓库 pull 下来，然后进行冲突处理，之后即可成功 push。</p>
+<p>在远程仓库一节，我们说 pull 和 fetch 有区别，在这里就可以详细解释了：fetch 只是将远程仓库 clone 到本地远程仓库，而工作区并未发生变化。此时我们就需要将远程仓库与本地仓库进行合并，例如对 dev 分支进行合并，需要切换到 dev 分支并使用命令 <code>git merge origin/dev</code> 将本地远程仓库的 dev 分支与本地的 dev 分支进行合并。而 pull 则将这两个过程一步完成了。如果远程仓库与本地仓库的冲突较多，推荐使用 fetch + merge 的方式处理。</p>
+<h2 id="版本回滚"><a href="#版本回滚" class="headerlink" title="版本回滚"></a>版本回滚</h2><p>版本回滚本来应该在版本库就介绍的，因为这是一个十分常用的功能。但是在分支管理后再进行介绍有助于理解这个过程。版本回滚有许多情况和实现方式，下面将分开介绍。</p>
+<h3 id="版本回退（reset）"><a href="#版本回退（reset）" class="headerlink" title="版本回退（reset）"></a>版本回退（reset）</h3><p>如果我们想回退版本到上个版本，可以使用命令 <code>git reset</code> 来进行版本回退，其有三种不同的模式：</p>
+<ol>
+<li>mixed：<code>git reset --mixed HEAD^</code> 命令可以将版本回退到上个版本，重置暂存区的文件与上一次提交的一致，工作区内容不变，此为默认参数，可不加 <code>--mixed</code>；</li>
+<li>soft：<code>git reset --soft HEAD^</code> 命令可以将版本回退到上个版本，暂存区和工作区不变，并将由于回退导致的变化储存到暂存区；</li>
+<li>hard：<code>git reset --hard HEAD^</code> 命令可以将版本回退到上个版本，工作区和暂存区均回到上一版本。</li>
+</ol>
+<p>reset 的实质是移动分支的指针以及 HEAD 指针，因此使用 hard 模式时可以做到<strong>分支之间的转移</strong>：<code>git reset --hard dev</code> 将 master 的指针指向 dev 指针所指向的版本。</p>
+<p>下面将区分这三种模式的使用场景：</p>
+<ol>
+<li>hard：需要放弃本地的所有改动时可以使用该参数；需要舍弃某次提交之后的所有提交后可以使用；</li>
+<li>soft：如果我们在两个大阶段间频繁进行多次没有多少意义的 commit，那么可以使用 soft 模式将某版本后的所有提交集成为一个提交，达到简化版本提交历史的目的；</li>
+<li>mixed：类似 soft，可以在回退后进行 <code>git add -A</code> 来达到简化提交历史的目的；某次提交了错误的文件，但不能全部舍弃。</li>
+</ol>
+<p>而上文中出现的 HEAD^ 代表上一个版本，而 HEAD 代表这一个版本，HEAD^^ 代表往前两个版本，以此类推……若版本数过多，可以使用 HEAD~100 来代替往前 100 个版本。同时也可以使用提交的 ID 进行回退。</p>
+<p>如果不小心错误地回退，可以使用 <code>git reflog</code> 来查看历史命令找到版本 ID。</p>
+<h3 id="版本还原（revert）"><a href="#版本还原（revert）" class="headerlink" title="版本还原（revert）"></a>版本还原（revert）</h3><p>版本回退会将版本直接「退」到指定版本，而还原则可以将某版本的提交取消而<strong>不影响后续提交</strong>，即如果上上个版本添加了字母 A，上个版本添加了字母 B，则 revert 到上上个版本时只会删除 A 而不删除 B（当然，这只是个例子，Git 是按照行来进行追踪的）。只需要使用命令 <code>git revert ID</code> 即可实现版本还原。</p>
+<h2 id="标签管理"><a href="#标签管理" class="headerlink" title="标签管理"></a>标签管理</h2><p>使用命令 <code>git tag yourtag</code> 即可将标签 yourtag 打在<strong>最新的提交</strong>上，如果需要指定某提交，只需要在最后加上版本号。使用命令 <code>git tag</code> 即可列出所有标签。</p>
+<p>如果想要创建有具体说明的标签，可以使用 <code>git tag -a yourtag -m &#39;msg&#39; ID</code> 来指定标签名和说明，而使用 <code>git show yourtag</code> 可以看到说明文字。</p>
+<p>使用命令 <code>git tag -d yourtag</code> 即可删除某个指定的标签。</p>
+<p>标签只存在于本地而不会上传到远程，如果想要上传需要使用命令 <code>git push origin yourtag</code> 推送某一标签或 <code>git push origin --tags</code> 来推送所有标签。而删除远程标签需要使用 <code>git push origin :refs/tags/yourtag</code> 或 <code>git push origin -d tag yourtag</code>。</p>
+<h2 id="设置忽略文件"><a href="#设置忽略文件" class="headerlink" title="设置忽略文件"></a>设置忽略文件</h2><p>有时候需要在工作目录放一些不能提交的文件，如果每次都要注意 add 的时候不把它加进去未免过于繁琐、简陋，我们码代码也需要矜持优雅。因此我们可以在 Git 工作区的根目录创建一个文件 .gitignore 然后添加指定文件或文件类型即可，具体可参考<a target="_blank" rel="noopener" href="https://github.com/github/gitignore">这里</a>。如我们不需要提交所有的隐藏文件和 txt 文件，只需要在 .gitignore 中添加两行</p>
+<pre class="language-none"><code class="language-none">.*
+*.txt</code></pre>
+
+<p>即可，这里我们要注意，<code>.*</code> 将忽略 .gitignore 文件，因此我们还需要加入一行</p>
+<pre class="language-none"><code class="language-none">!.gitignore</code></pre>
+
+<p>来防止 .gitignore 文件不被追踪。也可以使用命令 <code>git add -f .gitignore</code> 进行添加。</p>
+<p>如果我们发现某文件无法被 Git 追踪，那么可以使用 <code>git check-ignore -v file</code> 对 file 进行检查，这会传出 .gitignore 中忽略该文件的规则。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>终于把 Git 的笔记写完了，这里就推荐一下一些好用的工具吧。</p>
+<p>首先是 GitHub 官方的客户端 GitHub Desktop，我在数学建模中和队员们就是使用这个进行文件同步，对于计算机小白也十分友好，只需要按个按钮 commit，push 和 pull 就行了。</p>
+<p>其次是 SourceTree，这是一个免费的 Git 图形界面工具，GitHub Desktop 只支持本地 repo 和托管到 GitHub 上的 repo，如果你是使用别的托管平台或者自己搭建 Git 服务器，就可以使用 SourceTree 进行图形化管理。</p>
+<p>然后就是我最喜欢的 VS Code 插件组合，GitLens 和 Git Graph，两个完全足够使用，配合 Power Shell 和 VS Code 其他的插件，能让写代码变得「一体化」：不需要再打开其他软件进行 Git 的操作，只需要在内置的 Power Shell 或插件进行使用即可。</p>
+</div></section><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><span class="icon iconify" data-icon="ri:money-dollar-circle-line"></span></span><div id="reward-comment">我很可爱，请给我钱</div><div id="qr" style="display:none;"><div style="display:inline-block"><a href="/img/alipay.jpg"><img loading="lazy" src="/img/alipay.jpg" alt="支付宝" title="支付宝"></a><div><span style="color:#00A3EE"><span class="icon iconify" data-icon="ri:alipay-line"></span></span></div></div><div style="display:inline-block"><a href="/img/wechatpay.png"><img loading="lazy" src="/img/wechatpay.png" alt="微信支付" title="微信支付"></a><div><span style="color:#2DC100"><span class="icon iconify" data-icon="ri:qq-line"></span></span></div></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>紅葉</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="http://jk-momiji.com/Note-of-Git/" title="Git笔记">http://jk-momiji.com/Note-of-Git/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><span class="icon iconify" data-icon="ri:creative-commons-line"></span><span class="icon iconify" data-icon="ri:creative-commons-by-line"></span><span class="icon iconify" data-icon="ri:creative-commons-nc-line"></span><span class="icon iconify" data-icon="ri:creative-commons-sa-line"></span></a> 许可协议。</li></ul></article><div class="post-nav"><div class="post-nav-item"></div><div class="post-nav-item"><a class="post-nav-next" href="/After-Reading-The-Rise-and-Fall-of-the-Third-Reich/02/" rel="next" title="读『第三帝国的兴亡：纳粹德国史』有感（二）"><span class="post-nav-text">读『第三帝国的兴亡：纳粹德国史』有感（二）</span><span class="icon iconify" data-icon="ri:arrow-right-s-line"></span></a></div></div></div><div class="hty-card" id="comment"></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2022 </span><span class="with-love" id="animate"><span class="icon iconify" data-icon="ri:cloud-line"></span></span><span class="author"> 紅葉</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v6.0.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.10.6</span></div><div id="busuanzi"><span id="busuanzi_container_site_uv" title="总访客量"><span><span class="icon iconify" data-icon="ri:user-line"></span></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><span class="icon iconify" data-icon="ri:eye-line"></span></span><span id="busuanzi_value_site_pv"></span></span><script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></footer></div><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><span class="icon iconify" data-icon="ri:arrow-up-s-line"></span><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><script src="https://fastly.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script><script>const images = [...document.querySelectorAll('.markdown-body img')]
+mediumZoom(images)</script><style>.medium-zoom-image {
+  z-index: 99;
+}</style></body></html>

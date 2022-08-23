@@ -1,0 +1,147 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="紅葉"><meta name="copyright" content="紅葉"><meta name="generator" content="Hexo 6.0.0"><meta name="theme" content="hexo-theme-yun"><title>数据分析中的常用模型与方法 | 紅葉の森</title><meta name="robots" content="noindex"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/star-markdown-css@0.3.3/dist/yun/yun-markdown.min.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/prism-theme-vars/base.css"><script src="https://fastly.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>function initScrollReveal() {
+  [".post-card",".markdown-body img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+}
+document.addEventListener("DOMContentLoaded", initScrollReveal);
+document.addEventListener("pjax:success", initScrollReveal);
+</script><link rel="icon" type="image/png" href="/img/favicon.png"><link rel="mask-icon" href="/img/favicon.png" color="#0078E7"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fastly.jsdelivr.net/npm/" crossorigin><script id="yun-config">
+    window.Yun = {}
+    window.CONFIG = {"hostname":"jk-momiji.com","root":"/","title":"紅葉の森","version":"1.10.6","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.yunyoujun.cn/img/avatar/none.jpg","say":{"api":"https://el-bot-api.vercel.app/api/words/young"},"fireworks":{"colors":null},"vendors":{"host":"https://fastly.jsdelivr.net/npm/","darken":"https://fastly.jsdelivr.net/npm/darken@1.5.0"}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/hexo-theme-yun.js" type="module"></script><script>(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();</script><meta name="description" content="本文将介绍一些常用的数据分析方法与模型以及其 Python 实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据分析中的常用模型与方法">
+<meta property="og:url" content="http://jk-momiji.com/Models-and-Methods-in-Data-Analysis/">
+<meta property="og:site_name" content="紅葉の森">
+<meta property="og:description" content="本文将介绍一些常用的数据分析方法与模型以及其 Python 实现。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-12T02:25:05.000Z">
+<meta property="article:modified_time" content="2022-08-23T09:37:14.825Z">
+<meta property="article:author" content="紅葉">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="数学建模">
+<meta property="article:tag" content="数据分析">
+<meta name="twitter:card" content="summary"><script>(function() {
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const setting = localStorage.getItem('darken-mode') || 'auto'
+  if (setting === 'dark' || (prefersDark && setting !== 'light'))
+    document.documentElement.classList.toggle('dark', true)
+})()</script></head><body><script src="https://code.iconify.design/2/2.1.1/iconify.min.js"></script><script>// Define global variable
+IconifyProviders = {
+  // Empty prefix: overwrite default API provider configuration
+  '': {
+    // Use custom API first, use Iconify public API as backup
+    resources: [
+        'https://api.iconify.design',
+    ],
+    // Wait for 1 second before switching API hosts
+    rotate: 1000,
+  },
+};</script><script defer src="https://fastly.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><span class="icon iconify" data-icon="ri:list-ordered"></span></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><span class="icon iconify" data-icon="ri:passport-line"></span></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="紅葉"><img width="96" loading="lazy" src="/img/avatar.png" alt="紅葉"><span class="site-author-status" title="努力提升">📖</span></a><div class="site-author-name"><a href="/about/">紅葉</a></div><span class="site-name">紅葉の森</span><sub class="site-subtitle">记录每一个思想的火花</sub><div class="site-description">Cogito, ergo sum.</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:home-4-line"></span></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:archive-line"></span></span><span class="site-state-item-count">23</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:folder-2-line"></span></span><span class="site-state-item-count">7</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="site-state-item-count">29</span></a></div><a class="site-state-item hty-icon-button" href="/about/#comment" title="留言板"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:clipboard-line"></span></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><span class="icon iconify" data-icon="ri:rss-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Jk-Cheung" title="GitHub" target="_blank" style="color:#6e5494"><span class="icon iconify" data-icon="ri:github-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:jk.momiji1230@gmail.com" title="E-Mail" target="_blank" style="color:#8E71C1"><span class="icon iconify" data-icon="ri:mail-line"></span></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="我的小伙伴们" style="color:dodgerblue"><span class="icon iconify" data-icon="ri:genderless-line"></span></a><a class="links-item hty-icon-button" href="/resources/" title="资源" style="color:green"><span class="icon iconify" data-icon="ri:cloud-line"></span></a><a class="links-item hty-icon-button" href="/girls/" title="喜欢的女孩子" style="color:hotpink"><span class="icon iconify" data-icon="ri:women-line"></span></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><span class="icon iconify" data-icon="ri:contrast-2-line"></span></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">数据预处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%80%BC%E7%9A%84%E7%AD%9B%E9%80%89%E4%B8%8E%E5%A4%84%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text">异常值的筛选与处理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%80%BC%E7%9A%84%E6%A3%80%E6%B5%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">异常值的检测</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83%EF%BC%88Z-Score%EF%BC%89%E7%9A%84%E4%B8%80%E5%85%83%E5%BC%82%E5%B8%B8%E5%80%BC%E6%A3%80%E6%B5%8B"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">基于正态分布（Z-Score）的一元异常值检测</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%95%B0%E5%AD%97%E5%BC%82%E5%B8%B8%E5%80%BC%EF%BC%88Numeric-Out%EF%BC%89%E7%9A%84%E4%B8%80%E5%85%83%E5%BC%82%E5%B8%B8%E5%80%BC%E6%A3%80%E6%B5%8B"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">基于数字异常值（Numeric Out）的一元异常值检测</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83%E7%9A%84-n-%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%BC%82%E5%B8%B8%E5%80%BC%E6%A3%80%E9%AA%8C"><span class="toc-number">1.1.1.3.</span> <span class="toc-text">基于正态分布的 n 维数据异常值检验</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AD%A4%E7%AB%8B%E6%A3%AE%E6%9E%97%EF%BC%88Isolation-Forest%EF%BC%89%E7%AE%97%E6%B3%95"><span class="toc-number">1.1.1.4.</span> <span class="toc-text">孤立森林（Isolation Forest）算法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#DBSCAN-%E5%AF%86%E5%BA%A6%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95"><span class="toc-number">1.1.1.5.</span> <span class="toc-text">DBSCAN 密度聚类算法</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">2.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="http://jk-momiji.com/Models-and-Methods-in-Data-Analysis/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="紅葉"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="紅葉の森"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">数据分析中的常用模型与方法</h1><div class="post-meta"><div class="post-time"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-line"></span></span> <time title="创建时间：2022-08-12 10:25:05" itemprop="dateCreated datePublished" datetime="2022-08-12T10:25:05+08:00">2022-08-12</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-2-line"></span></span> <time title="修改时间：2022-08-23 17:37:14" itemprop="dateModified" datetime="2022-08-23T17:37:14+08:00">2022-08-23</time></div><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><span class="icon iconify" data-icon="ri:eye-line"></span> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><span class="icon iconify" data-icon="ri:folder-line"></span></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">学习笔记</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/Python/" style="--text-color:#3776ab"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">Python</span></a><a class="tag-item" href="/tags/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">数学建模</span></a><a class="tag-item" href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">数据分析</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><p>本文将介绍一些常用的数据分析方法与模型以及其 Python 实现。</p>
+<span id="more"></span>
+
+<h2 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h2><h3 id="异常值的筛选与处理"><a href="#异常值的筛选与处理" class="headerlink" title="异常值的筛选与处理"></a>异常值的筛选与处理</h3><p>异常值（outlier）是指与其他观测值有显著差异的数据点，异常值可能会导致统计分析中出现严重的问题，因此需要对其进行处理。能妥善处理异常值的估计量，称为「稳健」。</p>
+<h4 id="异常值的检测"><a href="#异常值的检测" class="headerlink" title="异常值的检测"></a>异常值的检测</h4><h5 id="基于正态分布（Z-Score）的一元异常值检测"><a href="#基于正态分布（Z-Score）的一元异常值检测" class="headerlink" title="基于正态分布（Z-Score）的一元异常值检测"></a>基于正态分布（Z-Score）的一元异常值检测</h5><p>若数据为一维，在数据服从正态分布的假设下，以参数估计近似分布的均值与标准差，利用 $3-\sigma$ 原则检测异常值（即 z-score 的绝对值超过 3）。</p>
+<h5 id="基于数字异常值（Numeric-Out）的一元异常值检测"><a href="#基于数字异常值（Numeric-Out）的一元异常值检测" class="headerlink" title="基于数字异常值（Numeric Out）的一元异常值检测"></a>基于数字异常值（Numeric Out）的一元异常值检测</h5><p>若数据未通过正态性检验，则可使用数字异常值方法来进行异常值的检验。计算数据的第一和第三四分位数，分别记为 $Q_1, Q_2$，则可确定非异常数据的上下界为</p>
+<p>$$\begin{aligned} &amp;\text{sup} &#x3D; Q_1 - k(IQR) \ &amp;\text{inf} &#x3D; Q_3 + k(IQR) \end{aligned} $$</p>
+<p>其中 $IQR &#x3D; Q_3 - Q_1$，且 $k \geq 0$，一般取 $k &#x3D; 1.5$，即上下晶须的箱线图。</p>
+<h5 id="基于正态分布的-n-维数据异常值检验"><a href="#基于正态分布的-n-维数据异常值检验" class="headerlink" title="基于正态分布的 n 维数据异常值检验"></a>基于正态分布的 n 维数据异常值检验</h5><p>而若数据为 n 维，若某些维度的数据服从正态分布，则可对这些维度的数据进行单独的正态分布异常值检测。若不服从正态分布，则可使用 Z-Score 进行检测。</p>
+<p>而若这 n 维数据服从于 n 元正态分布，则可计算 n 维均值向量</p>
+<p>$$ \vec\mu &#x3D; (E(x_1), E(x_2), \cdots, E(x_n)) $$</p>
+<p>与协方差矩阵</p>
+<p>$$ \Sigma &#x3D; [\text{Cov}(x_i, x_j), i, j \in {1, 2, \cdots, n}] $$</p>
+<p>对于某个数据 $\vec x$，计算其概率</p>
+<p>$$ p(\vec x) &#x3D; \dfrac 1 {(2\pi)^{n&#x2F;2}|\Sigma|^{1&#x2F;2}}\text{exp}\left[-\dfrac12(\vec x - \vec\mu)’\Sigma^{-1}(\vec x - \vec\mu)\right] $$</p>
+<p>概率在 $3-\sigma$  外的即为异常值。</p>
+<h5 id="孤立森林（Isolation-Forest）算法"><a href="#孤立森林（Isolation-Forest）算法" class="headerlink" title="孤立森林（Isolation Forest）算法"></a>孤立森林（Isolation Forest）算法</h5><p>使用孤立森林算法的数据需要满足以下两点：</p>
+<ol>
+<li>异常数据占比很小；</li>
+<li>异常点的特征（如坐标）与正常点的差异很大。</li>
+</ol>
+<p>通常首先作图对数据的分布进行直观的观测，<strong>若在某一（些）小区域中数据点十分集中</strong>，而剩余区域中数据点<strong>很少且不成群</strong>，则可使用孤立森林算法。</p>
+<p>该算法的思想为使用一个随机的超平面对数据空间进行切割，生成两个子空间，然后继续随机选取超平面进行对生成的两个子空间进行切割……不断进行这个过程直到每个子空间中只包含一个数据点。在这个过程中，密度很高的簇需要许多次切割才会停止，而分布稀疏的点很快就会停止在一个子空间中。</p>
+<p><strong>训练过程分为三步，如下：</strong></p>
+<ol>
+<li><p>单棵树的训练</p>
+<ol>
+<li>在训练数据中随机选择 $\Psi$ 个样本点作为子样本，放入一棵孤立树的根节点；</li>
+<li>随机指定一个维度，在当前节点的数据范围内，随机产生一个切割点 p —— 切割点产生于当前节点数据中指定维度的最大值与最小值之间；</li>
+<li>此切割点的选取生成了一个超平面，将当前节点数据空间切分为 2 个子空间：将当前所选唯独下小于 p 的点放在当前节点的左分支，把大于等于 p 的点放在当前节点的右分支；</li>
+<li>在节点的左右分支节点分别递归比上步骤 2 与 3，不断构造新的叶子节点，直到叶子节点上只有一个数据（无法再继续切割）或树已经生长到了所设定的最大高度；</li>
+</ol>
+</li>
+<li><p>整合全部孤立树的结果</p>
+<ol>
+<li><p>由于切割过程是完全随机的，所以需要用集成学习（Ensemble Learning）的方法来使结果收敛，即反复从头开始切分，然后计算每次切分结果的平均值。</p>
+</li>
+<li><p>获得 t 个孤立树后，单棵树的训练就结束了，然后需要进行评估测试数据，即计算异常分数 $s$，对于每个样本 $x$，通过公式</p>
+<p> $$ s(x, \psi) &#x3D; 2^{-\frac{E(h(x))}{c(\psi)}} $$ </p>
+<p>计算异常得分，其中 $h(x)$ 为 $x$ 在每棵树的高度，$c(\psi)$ 为给定样本数 $\varPsi$ 时路径长度的平均值，用来对样本 $x$ 的路径长度 $h(x)$ 进行标准化处理。一般我们设置树的棵数为 100 即可；</p>
+</li>
+</ol>
+</li>
+<li><p>异常得分分析</p>
+<ol>
+<li>若异常得分接近 1，则该点一定是异常点；</li>
+<li>若异常得分远小于 0.5，则该点一定不是异常点；</li>
+<li>若所有点的异常得分都在 0.5 左右，则样本中很可能不存在异常点。</li>
+</ol>
+<p><strong>需要注意的点：</strong></p>
+<ol>
+<li>若样本中异常比例过高，则结果可能不理想。因此该算法仅适用于异常比例较低的样本；</li>
+<li>异常检测与具体应用场景密切相关，因此需要过滤不相关的特征。</li>
+</ol>
+<p><strong>该算法的优点</strong>：</p>
+<ol>
+<li>在训练过程中，每棵孤立树都是随机选取部分样本，保证了算法的精确性与稳定性；</li>
+<li>不同于 KMeans、DBSCAN 等算法，孤立森林不需要计算有关距离、密度的指标，可大幅度提升速度，减小系统开销；</li>
+<li>由于基于集成学习（Ensemble Learning），所以有线性时间复杂度。通常树的数量越多，算法越稳定。</li>
+</ol>
+<p><strong>算法实现</strong>：</p>
+<p>我们使用 Sklearn 中的 IsolationForest 实现该算法</p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>ensemble <span class="token keyword">import</span> IsolationForest
+clf <span class="token operator">=</span> IsolationForest<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+
+<p>其中常用参数设置如下：</p>
+<ul>
+<li><code>n_estimators: int, (optional, default=100)</code>：指定该森林中生成的随机树数量；</li>
+<li><code>max_samples: int, float, &#39;auto&#39;, (optional, default=&#39;auto&#39;)</code>：用来训练随机数的样本数量，即子采样的大小，若为 int 类型则设置子采样大小为该数；若为 float 类型则取总数的该比例的样本；若为 <code>&#39;auto&#39;</code>，则设置为 256 和样本总数中最小的那一个；</li>
+<li><code>contamination: float, &#39;auto&#39;, (optional, default=&#39;auto&#39;)</code>：异常数据占给定的数据集的比例，为 <code>&#39;auto&#39;</code>时为 0.22；</li>
+<li><code>max_features: int, float, (optional, default=1)</code>：最大特征数，指定从总样本 X 中抽取来训练每棵树的属性的数量；</li>
+<li><code>bootstrap: bool, (optional, default=False)</code>：构建 Tree 时，下次是否替换采样，为 True 为替换，则各个树可放回地对训练数据进行采样；为 False 为不替换，即执行不放回的采样；</li>
+<li><code>n_jobs: int, None, (optional, default=None)</code>：在运行 fit () 和 predict () 函数时并行运行的作业数量。除了在 joblib.parallel_backend 上下文的情况下，None 表示为 1，设置为 -1 则表示使用所有可以使用的处理器；</li>
+<li><code>random_state: int, RandomState instance, None, (optional, default=None)</code>：如果设置为 int 常数，则该 random_state 参数值是用于随机数生成器的种子；如果设置为 RandomState 实例，则该 random_state 就是一个随机数生成器；如果设置为 None，则该随机数生成器就是使用在 np.random 中 RandomState 实例；</li>
+<li><code>verbose: int, (optional, default=0)</code>：控制树构建过程的冗长性；</li>
+<li><code>warm_start: bool, (optional, default=False)</code>：当设置为 <code>True</code> 时，重用上一次调用的结果去 fit，添加更多的树到上一次的森林 1 集合中；否则就 fit 一整个新的森林；</li>
+</ul>
+<p>其中常用属性如下：</p>
+<ul>
+<li><code>estimators_</code>：构造好的子树的集合；</li>
+<li><code>estimators_samples</code>：每个子树抽取的样本的子集；</li>
+<li><code>max_samples_</code>：样本的真正数量；</li>
+</ul>
+<p>常用方法介绍：</p>
+<ul>
+<li><code>fit(X)</code>：对模型进行训练；</li>
+<li><code>fit_predict(X)</code>：对模型进行训练并评价；</li>
+<li><code>decision_function(X)</code>：计算异常得分。</li>
+</ul>
+</li>
+</ol>
+<h5 id="DBSCAN-密度聚类算法"><a href="#DBSCAN-密度聚类算法" class="headerlink" title="DBSCAN 密度聚类算法"></a>DBSCAN 密度聚类算法</h5><p>当某一数据集存在多个密度核心时，可使用 DBSCAN 聚类进行异常值的筛选</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/38066650/answer/549125707">有哪些比较好的做异常值检测的方法？ - 阿里云云栖号的回答 - 知乎</a><br>[2] <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/38066650/answer/107801822">有哪些比较好的做异常值检测的方法？ - 张戎的回答 - 知乎</a><br>[3] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/74508141">异常检测算法 – 孤立森林（Isolation Forest）剖析</a><br>[4] <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_31866177/article/details/89416513">【机器学习】密度聚类 DBSCAN 与异常检测</a></p>
+<!-- flag of hidden posts --></div></section><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><span class="icon iconify" data-icon="ri:money-dollar-circle-line"></span></span><div id="reward-comment">我很可爱，请给我钱</div><div id="qr" style="display:none;"><div style="display:inline-block"><a href="/img/alipay.jpg"><img loading="lazy" src="/img/alipay.jpg" alt="支付宝" title="支付宝"></a><div><span style="color:#00A3EE"><span class="icon iconify" data-icon="ri:alipay-line"></span></span></div></div><div style="display:inline-block"><a href="/img/wechatpay.png"><img loading="lazy" src="/img/wechatpay.png" alt="微信支付" title="微信支付"></a><div><span style="color:#2DC100"><span class="icon iconify" data-icon="ri:qq-line"></span></span></div></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>紅葉</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="http://jk-momiji.com/Models-and-Methods-in-Data-Analysis/" title="数据分析中的常用模型与方法">http://jk-momiji.com/Models-and-Methods-in-Data-Analysis/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><span class="icon iconify" data-icon="ri:creative-commons-line"></span><span class="icon iconify" data-icon="ri:creative-commons-by-line"></span><span class="icon iconify" data-icon="ri:creative-commons-nc-line"></span><span class="icon iconify" data-icon="ri:creative-commons-sa-line"></span></a> 许可协议。</li></ul></article></div><div class="hty-card" id="comment"></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2022 </span><span class="with-love" id="animate"><span class="icon iconify" data-icon="ri:cloud-line"></span></span><span class="author"> 紅葉</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v6.0.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.10.6</span></div><div id="busuanzi"><span id="busuanzi_container_site_uv" title="总访客量"><span><span class="icon iconify" data-icon="ri:user-line"></span></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><span class="icon iconify" data-icon="ri:eye-line"></span></span><span id="busuanzi_value_site_pv"></span></span><script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></footer></div><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><span class="icon iconify" data-icon="ri:arrow-up-s-line"></span><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><script src="https://fastly.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script><script>const images = [...document.querySelectorAll('.markdown-body img')]
+mediumZoom(images)</script><style>.medium-zoom-image {
+  z-index: 99;
+}</style></body></html>

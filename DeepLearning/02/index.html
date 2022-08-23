@@ -1,0 +1,262 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="紅葉"><meta name="copyright" content="紅葉"><meta name="generator" content="Hexo 6.0.0"><meta name="theme" content="hexo-theme-yun"><title>DeepLearn 学习笔记 - 02 | 紅葉の森</title><meta name="robots" content="noindex"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/star-markdown-css@0.3.3/dist/yun/yun-markdown.min.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/prism-theme-vars/base.css"><script src="https://fastly.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>function initScrollReveal() {
+  [".post-card",".markdown-body img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+}
+document.addEventListener("DOMContentLoaded", initScrollReveal);
+document.addEventListener("pjax:success", initScrollReveal);
+</script><link rel="stylesheet" type="text/css" href="https://fastly.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script defer src="https://fastly.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script><link rel="stylesheet" type="text/css" href="https://fastly.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.min.css"><script defer src="https://fastly.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.min.js"></script><script defer src="https://fastly.jsdelivr.net/npm/katex@latest/dist/contrib/auto-render.min.js"></script><script type="module">import { renderKatex } from '/js/utils.js'
+document.addEventListener("DOMContentLoaded", () => {
+  renderKatex({
+    ...{},
+    ...true?.options,
+  });
+});</script><link rel="icon" type="image/png" href="/img/favicon.png"><link rel="mask-icon" href="/img/favicon.png" color="#0078E7"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fastly.jsdelivr.net/npm/" crossorigin><script id="yun-config">
+    window.Yun = {}
+    window.CONFIG = {"hostname":"jk-momiji.com","root":"/","title":"紅葉の森","version":"1.10.6","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.yunyoujun.cn/img/avatar/none.jpg","say":{"api":"https://el-bot-api.vercel.app/api/words/young"},"fireworks":{"colors":null},"vendors":{"host":"https://fastly.jsdelivr.net/npm/","darken":"https://fastly.jsdelivr.net/npm/darken@1.5.0"}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/hexo-theme-yun.js" type="module"></script><script>(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();</script><meta name="description" content="用 Pytorch 实现房价预测   点击查看索引">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DeepLearn 学习笔记 - 02">
+<meta property="og:url" content="http://jk-momiji.com/DeepLearning/02/">
+<meta property="og:site_name" content="紅葉の森">
+<meta property="og:description" content="用 Pytorch 实现房价预测   点击查看索引">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://jk-momiji.com/DeepLearning/02/github.png">
+<meta property="og:image" content="http://jk-momiji.com/DeepLearning/02/repo.png">
+<meta property="og:image" content="http://jk-momiji.com/DeepLearning/02/ssh.png">
+<meta property="og:image" content="http://jk-momiji.com/DeepLearning/02/ssh.png">
+<meta property="og:image" content="http://jk-momiji.com/DeepLearning/02/sshsuccess.png">
+<meta property="og:image" content="http://jk-momiji.com/DeepLearning/02/gitclone.png">
+<meta property="og:image" content="http://jk-momiji.com/DeepLearning/02/newfile.png">
+<meta property="og:image" content="http://jk-momiji.com/DeepLearning/02/code.png">
+<meta property="og:image" content="http://jk-momiji.com/DeepLearning/02/excelviewer.png">
+<meta property="article:published_time" content="2022-02-14T06:11:08.000Z">
+<meta property="article:modified_time" content="2022-08-23T09:41:40.969Z">
+<meta property="article:author" content="紅葉">
+<meta property="article:tag" content="编程">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://jk-momiji.com/DeepLearning/02/github.png"><script>(function() {
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const setting = localStorage.getItem('darken-mode') || 'auto'
+  if (setting === 'dark' || (prefersDark && setting !== 'light'))
+    document.documentElement.classList.toggle('dark', true)
+})()</script></head><body><script src="https://code.iconify.design/2/2.1.1/iconify.min.js"></script><script>// Define global variable
+IconifyProviders = {
+  // Empty prefix: overwrite default API provider configuration
+  '': {
+    // Use custom API first, use Iconify public API as backup
+    resources: [
+        'https://api.iconify.design',
+    ],
+    // Wait for 1 second before switching API hosts
+    rotate: 1000,
+  },
+};</script><script defer src="https://fastly.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><span class="icon iconify" data-icon="ri:list-ordered"></span></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><span class="icon iconify" data-icon="ri:passport-line"></span></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="紅葉"><img width="96" loading="lazy" src="/img/avatar.png" alt="紅葉"><span class="site-author-status" title="努力提升">📖</span></a><div class="site-author-name"><a href="/about/">紅葉</a></div><span class="site-name">紅葉の森</span><sub class="site-subtitle">记录每一个思想的火花</sub><div class="site-description">Cogito, ergo sum.</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:home-4-line"></span></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:archive-line"></span></span><span class="site-state-item-count">23</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:folder-2-line"></span></span><span class="site-state-item-count">7</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="site-state-item-count">29</span></a></div><a class="site-state-item hty-icon-button" href="/about/#comment" title="留言板"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:clipboard-line"></span></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><span class="icon iconify" data-icon="ri:rss-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Jk-Cheung" title="GitHub" target="_blank" style="color:#6e5494"><span class="icon iconify" data-icon="ri:github-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:jk.momiji1230@gmail.com" title="E-Mail" target="_blank" style="color:#8E71C1"><span class="icon iconify" data-icon="ri:mail-line"></span></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="我的小伙伴们" style="color:dodgerblue"><span class="icon iconify" data-icon="ri:genderless-line"></span></a><a class="links-item hty-icon-button" href="/resources/" title="资源" style="color:green"><span class="icon iconify" data-icon="ri:cloud-line"></span></a><a class="links-item hty-icon-button" href="/girls/" title="喜欢的女孩子" style="color:hotpink"><span class="icon iconify" data-icon="ri:women-line"></span></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><span class="icon iconify" data-icon="ri:contrast-2-line"></span></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E7%8E%AF%E5%A2%83%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">项目环境的配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B-Github-%E4%BB%93%E5%BA%93"><span class="toc-number">1.1.</span> <span class="toc-text">建立 Github 仓库</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Github-%E7%9A%84%E6%B3%A8%E5%86%8C%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.1.</span> <span class="toc-text">Github 的注册与配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SSH-key-%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.2.</span> <span class="toc-text">SSH key 的配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Clone-%E4%BB%93%E5%BA%93%E8%87%B3%E6%9C%AC%E5%9C%B0"><span class="toc-number">1.1.3.</span> <span class="toc-text">Clone 仓库至本地</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pandas-%E4%B8%8E-Matplotlib-%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.</span> <span class="toc-text">Pandas 与 Matplotlib 的安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pytorch-%E5%85%A5%E9%97%A8"><span class="toc-number">2.</span> <span class="toc-text">Pytorch 入门</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Tensor-%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">2.1.</span> <span class="toc-text">Tensor 的初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tensor-%E7%9A%84%E8%BF%90%E7%AE%97"><span class="toc-number">2.2.</span> <span class="toc-text">Tensor 的运算</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="toc-number">3.</span> <span class="toc-text">梯度下降</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%BF%E4%BB%B7%E9%A2%84%E6%B5%8B"><span class="toc-number">4.</span> <span class="toc-text">房价预测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">4.1.</span> <span class="toc-text">准备工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86"><span class="toc-number">4.2.</span> <span class="toc-text">数据预处理</span></a></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="http://jk-momiji.com/DeepLearning/02/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="紅葉"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="紅葉の森"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">DeepLearn 学习笔记 - 02</h1><div class="post-meta"><div class="post-time"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-line"></span></span> <time title="创建时间：2022-02-14 14:11:08" itemprop="dateCreated datePublished" datetime="2022-02-14T14:11:08+08:00">2022-02-14</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-2-line"></span></span> <time title="修改时间：2022-08-23 17:41:40" itemprop="dateModified" datetime="2022-08-23T17:41:40+08:00">2022-08-23</time></div><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><span class="icon iconify" data-icon="ri:eye-line"></span> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><span class="icon iconify" data-icon="ri:folder-line"></span></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">学习笔记</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/%E7%BC%96%E7%A8%8B/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">编程</span></a><a class="tag-item" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">深度学习</span></a><a class="tag-item" href="/tags/Python/" style="--text-color:#3776ab"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">Python</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><p>用 Pytorch 实现房价预测  </p>
+<a href="/Content/DeepLearning/" title="点击查看索引">点击查看索引</a>
+
+<span id="more"></span>
+
+<h2 id="项目环境的配置"><a href="#项目环境的配置" class="headerlink" title="项目环境的配置"></a>项目环境的配置</h2><p>进行项目时, 不论其大小, 都要进行较为规范与全面的操作, 以养成习惯, 并且能熟悉各种工具的使用.  </p>
+<h3 id="建立-Github-仓库"><a href="#建立-Github-仓库" class="headerlink" title="建立 Github 仓库"></a>建立 Github 仓库</h3><h4 id="Github-的注册与配置"><a href="#Github-的注册与配置" class="headerlink" title="Github 的注册与配置"></a>Github 的注册与配置</h4><p>在学习过程中, 我们可以将自己的代码与笔记上传到 Github 上, 以便于分享与查看.<br>首先注册一个 Github 的账号, 建立一个 repo(仓库).  </p>
+<p><img src="/DeepLearning/02/github.png" loading="lazy"><br><img src="/DeepLearning/02/repo.png" loading="lazy"></p>
+<p>然后在本地的 Terminal 中输入以下命令:  </p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">git config --global user.name &quot;Your Name&quot;
+git config --global user.email &quot;YourEmail@example.com&quot;</code></pre>
+
+<p>其中要更改为你在 Github 上注册的账号的 name 和 Email.  </p>
+<h4 id="SSH-key-的配置"><a href="#SSH-key-的配置" class="headerlink" title="SSH key 的配置"></a>SSH key 的配置</h4><p>为了方便对 repo 的访问, 我们可以设置一下 Git SSH key.  </p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">ssh-keygen -t rsa -C &quot;YourEmail@example.com&quot;</code></pre>
+
+<p>之后可能输入密码, 然后配置方面一路 Enter 即可, 默认配置足够使用.<br>生成完成后在 <strong>~&#x2F;.ssh</strong> 将看到两个文件:  </p>
+<p><img src="/DeepLearning/02/ssh.png" loading="lazy"></p>
+<p>我这里已经生成过了, 所以多了一个 known_hosts 的文件, 第一次生成可能不会出现.<br>然后进入 Github 界面, 点击右上角头像, 选择 <strong>Settings</strong> , 点击 <strong>SSH and GPG keys</strong> , 按下 <strong>New SSH key</strong> , 输入 <strong>id_rsa.pub</strong> 文件中的内容保存即可.  </p>
+<p><img src="/DeepLearning/02/ssh.png" loading="lazy"></p>
+<p>输入: <code>ssh -T git@github.com</code> 测试, 出现选项输入 <code>yes</code> 即可, 配置成功会出现类似输出:  </p>
+<p><img src="/DeepLearning/02/sshsuccess.png" loading="lazy"></p>
+<p>这样我们就可以愉快地使用 Github 啦~  </p>
+<h4 id="Clone-仓库至本地"><a href="#Clone-仓库至本地" class="headerlink" title="Clone 仓库至本地"></a>Clone 仓库至本地</h4><p>在 Github 上建立仓库后, 我们要在本地进行编辑, 所以需要将其 Clone 至本地.<br>在本地建立一个新文件夹, 我建议命名为 <strong>Git</strong> , 以便于统一管理.<br>在 Terminal 中, <code>cd</code> 至该文件夹中, 输入命令 <code>git clone yourURL</code>.<br>其中, <strong>yourURL</strong> 是在你的远程仓库中复制的, 如下图:  </p>
+<p><img src="/DeepLearning/02/gitclone.png" loading="lazy"></p>
+<p>然后就可以在本地与我们的 repo 愉快地玩耍啦~  </p>
+<h3 id="Pandas-与-Matplotlib-的安装"><a href="#Pandas-与-Matplotlib-的安装" class="headerlink" title="Pandas 与 Matplotlib 的安装"></a>Pandas 与 Matplotlib 的安装</h3><p>打开 Terminal, 输入命令:  </p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">conda install pandas matplotlib -n DL</code></pre>
+
+<p>即可在 DL 环境中安装 Pandas 和 Matplotlib.  </p>
+<h2 id="Pytorch-入门"><a href="#Pytorch-入门" class="headerlink" title="Pytorch 入门"></a>Pytorch 入门</h2><h3 id="Tensor-的初始化"><a href="#Tensor-的初始化" class="headerlink" title="Tensor 的初始化"></a>Tensor 的初始化</h3><p>在 Terminal 中 <code>cd</code> 至你的工作目录, 然后输入 <code>code .</code> 即可在当前目录下打开 VSCode.<br>建立一个新的 <strong>.ipynb</strong> 文件, 我这里命名为 <strong>code.ipynb</strong></p>
+<p><img src="/DeepLearning/02/newfile.png" loading="lazy"></p>
+<p>在 VSCode 中打开该文件, 会进入如下界面:  </p>
+<p><img src="/DeepLearning/02/code.png" loading="lazy"></p>
+<p>首先输入:</p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token operator">%</span>matplotlib inline
+<span class="token keyword">import</span> torch
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">import</span> pandas</code></pre>
+
+<p>其中:  </p>
+<ol>
+<li><code>%matplotlib inline</code> 表示将 matplotlib 的图像输出插入到输出行中.  </li>
+<li><code>import ...</code> 将我们所需的三个 Packages 导入到 Python 中.</li>
+</ol>
+<p>按下 <code>Shift + Enter</code> 即可运行并创建下一个代码块.<br>在 Pytorch 中, 数据的储存容器是 tensor, 我们可以通过以下代码创建新的 tensor:  </p>
+<pre class="language-python" data-language="python"><code class="language-python">a <span class="token operator">=</span> torch<span class="token punctuation">.</span>empty<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span>
+b <span class="token operator">=</span> torch<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span>
+c <span class="token operator">=</span> torch<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span>
+d <span class="token operator">=</span> torch<span class="token punctuation">.</span>ones<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">,</span> c<span class="token punctuation">,</span> d<span class="token punctuation">,</span> sep<span class="token operator">=</span><span class="token string">'\n'</span><span class="token punctuation">)</span></code></pre>
+
+<p>输出如下:  </p>
+<pre class="language-none"><code class="language-none">tensor([[-7.6264e-01,  4.5722e-41, -6.7857e-19],
+        [ 3.0740e-41,  4.4842e-44,  0.0000e+00],
+        [ 8.9683e-44,  0.0000e+00, -8.4501e-19]])
+tensor([[0.1820, 0.9340, 0.9872],
+        [0.9514, 0.6855, 0.7122],
+        [0.5567, 0.9431, 0.8098]])
+tensor([[0., 0., 0.],
+        [0., 0., 0.],
+        [0., 0., 0.]])
+tensor([[1., 1., 1.],
+        [1., 1., 1.],
+        [1., 1., 1.]])</code></pre>
+
+<p>这里我们通过 <code>dtype</code> 参数可以改变数据类型:  </p>
+<pre class="language-python" data-language="python"><code class="language-python">a <span class="token operator">=</span> torch<span class="token punctuation">.</span>empty<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> dtype<span class="token operator">=</span><span class="token builtin">int</span><span class="token punctuation">)</span></code></pre>
+
+<p>输出如下:  </p>
+<pre class="language-none"><code class="language-none">tensor([[3616445622929465956, 6067528668160208178, 3688512107902023472],
+        [6500718696040053038, 7309453675965983778, 8315168162784306286],
+        [8367752027310484831, 7954801838398993778, 2459029315949324647]])</code></pre>
+
+<p>这里的数据类型就变成了 <code>int</code> 类型.<br>Pytorch 有很多生成 tensor 的命令, 部分如下:  </p>
+<pre class="language-python" data-language="python"><code class="language-python">torch<span class="token punctuation">.</span>empty<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment"># 生成一个 1*2 的不初始化的 tensor.  </span>
+torch<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment"># 生成一个随机初始化的 tensor.  </span>
+torch<span class="token punctuation">.</span>zero<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment"># 生成一个全 0 的 tensor.  </span>
+torch<span class="token punctuation">.</span>ones<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment"># 生成一个全 1 的 tensor.  </span>
+torch<span class="token punctuation">.</span>tensor<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment"># 根据已有数据生成一个 tensor.  </span>
+
+device <span class="token operator">=</span> <span class="token string">'cuda'</span> <span class="token comment"># 设定 GPU 设备.  </span>
+a <span class="token operator">=</span> torch<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span>
+a <span class="token operator">=</span> a<span class="token punctuation">.</span>to<span class="token punctuation">(</span>device<span class="token punctuation">)</span> <span class="token comment"># 将 a 移动到 GPU.  </span>
+b <span class="token operator">=</span> a<span class="token punctuation">.</span>new_ones<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span>  <span class="token comment"># 根据 a 的属性生成新的全 1 的 tensor.  </span>
+c <span class="token operator">=</span> ones_like<span class="token punctuation">(</span>a<span class="token punctuation">)</span> <span class="token comment"># 根据 a 的属性生成新的全 1 的 tensor.  </span>
+
+<span class="token comment"># Tensor 与 numpy array 共用同一内存空间, 改变一个另一个会随之改变.  </span>
+np_array <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+d <span class="token operator">=</span> torch<span class="token punctuation">.</span>from_numpy<span class="token punctuation">(</span>np_array<span class="token punctuation">)</span> <span class="token comment"># 将 numpy array 转换为 tensor.  </span>
+e <span class="token operator">=</span> d<span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># 将 tensor 转换为 numpy array.  </span>
+
+a<span class="token punctuation">.</span>shape <span class="token comment"># a 的维数.  </span>
+a<span class="token punctuation">.</span>dtype <span class="token comment"># a 的数据类型.  </span>
+a<span class="token punctuation">.</span>device <span class="token comment"># a 的存储设备.  </span></code></pre>
+
+<h3 id="Tensor-的运算"><a href="#Tensor-的运算" class="headerlink" title="Tensor 的运算"></a>Tensor 的运算</h3><pre class="language-python" data-language="python"><code class="language-python">tensor <span class="token operator">=</span> torch<span class="token punctuation">.</span>ones<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 判断当前环境GPU是否可用, 然后将tensor导入GPU内运行</span>
+<span class="token keyword">if</span> torch<span class="token punctuation">.</span>cuda<span class="token punctuation">.</span>is_available<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    tensor <span class="token operator">=</span> tensor<span class="token punctuation">.</span>to<span class="token punctuation">(</span><span class="token string">'cuda'</span><span class="token punctuation">)</span></code></pre>
+
+<p>下列是 tensor 的部分运算:  </p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token comment"># Tensor 的索引与切片.  </span>
+t1 <span class="token operator">=</span> tensor<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span>
+t1<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>tensor<span class="token punctuation">)</span> <span class="token comment"># 这里可以看到, tensor 切片与 tensor 共享内存地址.  </span>
+
+<span class="token comment"># Tensor 的拼接.  </span>
+t2 <span class="token operator">=</span> torch<span class="token punctuation">.</span>cat<span class="token punctuation">(</span><span class="token punctuation">[</span>tensor<span class="token punctuation">,</span> tensor<span class="token punctuation">,</span> tensor<span class="token punctuation">]</span><span class="token punctuation">,</span> dim <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment"># 三个 tensor 在 1 维拼接.  </span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>t2<span class="token punctuation">)</span>
+
+<span class="token comment"># Tensor 的对应乘法.  </span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>tensor<span class="token punctuation">.</span>mul<span class="token punctuation">(</span>tensor<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>tensor <span class="token operator">*</span> tensor<span class="token punctuation">)</span>
+
+<span class="token comment"># Tensor 的矩阵乘法</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>tensor<span class="token punctuation">.</span>matmul<span class="token punctuation">(</span>tensor<span class="token punctuation">.</span>T<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>tensor @ tensor<span class="token punctuation">.</span>T<span class="token punctuation">)</span> <span class="token comment"># tensor.T 表示 tensor 的转置.  </span></code></pre>
+
+<h2 id="梯度下降"><a href="#梯度下降" class="headerlink" title="梯度下降"></a>梯度下降</h2><p>在数学中, 对于一个函数, 我们知道沿梯度方向函数增加速度最快, 而 <strong>沿梯度反向下降速度最快</strong> . 在深度学习中, 我们就利用梯度来实现函数误差最小化.<br>定义一个原函数:  </p>
+<p>$$<br>f(x_1, x_2) &#x3D; \omega_1^0x_1 + \omega_2^0x_2 + b_0<br>$$</p>
+<p>我们只知道其部分输入与输出, 需要根据这些数据来预测该函数.<br>定义一个预测函数:  </p>
+<p>$$<br>g(x_1, x_2) &#x3D; \omega_1x_1 + \omega_2x_2 + b<br>$$</p>
+<p>我们拥有一个 <strong>训练数据集(training data set)</strong> , 内有许多 <strong>样本(sample)</strong> , 自变量为 <strong>特征(feature)</strong> , 其真实函数值为 <strong>标签(label)</strong> .<br>为了方便书写, 下以首字母或前三个字母为缩写: TDS, SAM, FEA, LAB.<br>取 TDS 的一个子集, 将其 FEA 代入预测函数, 得到一组预测值:  </p>
+<p>$$<br>g(x_1^1, x_2^1), g(x_1^2, x_2^2), \cdots, g(x_1^n, x_2^n)<br>$$</p>
+<p>得到误差:  </p>
+<p>$$<br>l_i(x_1^i, x_2^i) &#x3D; \frac{1}{2}[f(x_1, x_2) - g(x_1, x_2)]^2<br>$$</p>
+<p>将这一子集的所有误差取平均, 得到 <strong>损失函数(loss function)</strong> :  </p>
+<p>$$<br>loss(\omega_1, \omega_2, b) &#x3D; \frac{1}{n}\sum_{i &#x3D; 1}^{n}l_i<br>$$</p>
+<p>通过对 loss function 中的 $\omega_1, \omega_2$ 偏微分, 得到其 <strong>梯度(grad)</strong> , 将 $\omega_1, \omega_2$ 减去某个值与其偏导数的乘积, 即可完成一次优化:  </p>
+<p>$$<br>\omega_i \gets \omega_i - \eta \cdot loss<br>$$</p>
+<p>其中 $\eta$ 为一个正数, 我们称之为 <strong>学习率(learning rate)</strong> , 其在大部分情况需要人为设置, 因此称为 <strong>超参数(hyperparameter)</strong> , 其数值不能过小, 否则训练时间会过长, 如果过大, 则会影响精确度. 因此, 我们经常在训练初期使用较高的 LR, 而在梯度变小后采用更小的 LR.  </p>
+<h2 id="房价预测"><a href="#房价预测" class="headerlink" title="房价预测"></a>房价预测</h2><h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><p>首先前往 <a target="_blank" rel="noopener" href="https://www.kaggle.com/c/house-prices-advanced-regression-techniques">Kaggle 比赛官网</a> 获取数据集, 我放到了我的 Github 的 <a target="_blank" rel="noopener" href="https://github.com/Jk-Cheung/DL_Learning">DL_Learning</a> 中, 可以直接 clone.<br>创建一个文件夹, 这里我创建为 <strong>HousePrice</strong> , 将 TDS 放入其中的文件夹 <strong>data</strong> 中, 同时在 <strong>HousePrice</strong> 中创建一个 <strong>ipynb</strong> 的文件, 我命名为 <strong>code.ipynb</strong><br>在 <strong>code.ipynb</strong> 中书写代码:  </p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token operator">%</span>matplotlib inline
+<span class="token keyword">import</span> torch
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">import</span> torch<span class="token punctuation">.</span>nn <span class="token keyword">as</span> nn
+<span class="token keyword">import</span> pandas <span class="token keyword">as</span> pd
+<span class="token keyword">import</span> sys
+
+
+torch<span class="token punctuation">.</span>set_default_tensor_type<span class="token punctuation">(</span>torch<span class="token punctuation">.</span>FloatTensor<span class="token punctuation">)</span> <span class="token comment"># 设置 tensor 默认数据类型为 float.  </span></code></pre>
+
+<p>读取文件并获取其信息:  </p>
+<pre class="language-python" data-language="python"><code class="language-python">train_data <span class="token operator">=</span> pd<span class="token punctuation">.</span>read_csv<span class="token punctuation">(</span><span class="token string">'./data/train.csv'</span><span class="token punctuation">)</span>
+test_data <span class="token operator">=</span> pd<span class="token punctuation">.</span>read_csv<span class="token punctuation">(</span><span class="token string">'./data/test.csv'</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>train_data<span class="token punctuation">.</span>shape<span class="token punctuation">,</span> test_data<span class="token punctuation">.</span>shape<span class="token punctuation">,</span> sep<span class="token operator">=</span><span class="token string">'\n'</span><span class="token punctuation">)</span></code></pre>
+
+<p>得到输出:  </p>
+<pre class="language-none"><code class="language-none">(1460, 81)
+(1459, 80)</code></pre>
+
+<p>可以使用 VSCode 的 <strong>Excel Viewer</strong> 插件以表格形式展示 csv 文件, 如下图:  </p>
+<p><img src="/DeepLearning/02/excelviewer.png" loading="lazy"></p>
+<p>我们可以看到, <strong>Id</strong> 这一 FEA 只是方便记录, 而对房价不会产生影响, 所以我们将其排除在外, 只使用其他 79 个 FEA:  </p>
+<pre class="language-python" data-language="python"><code class="language-python">all_fea <span class="token operator">=</span> pd<span class="token punctuation">.</span>concat<span class="token punctuation">(</span><span class="token punctuation">[</span>train_data<span class="token punctuation">.</span>iloc<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">,</span> test_data<span class="token punctuation">.</span>iloc<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span></code></pre>
+
+<p>这里 <code>pd.concat</code> 指横向连接, 而 <code>data.iloc</code> 指按照指定行列提取数据.  </p>
+<h3 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h3><p>对于 <strong>数值类型</strong> 的数据, 我们取其与平均值的差&#x2F;标准差 为特征值, 对于缺失的数据, 可直接取为 0:  </p>
+<pre class="language-python" data-language="python"><code class="language-python">num_fea <span class="token operator">=</span> all_fea<span class="token punctuation">.</span>dtypes<span class="token punctuation">[</span>all_fea<span class="token punctuation">.</span>dtypes <span class="token operator">!=</span> <span class="token string">'object'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>index
+all_fea<span class="token punctuation">[</span>num_fea<span class="token punctuation">]</span> <span class="token operator">=</span> all_fea<span class="token punctuation">[</span>num_fea<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">apply</span><span class="token punctuation">(</span>
+    <span class="token keyword">lambda</span> x<span class="token punctuation">:</span> <span class="token punctuation">(</span>x <span class="token operator">-</span> x<span class="token punctuation">.</span>mean<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token punctuation">(</span>x<span class="token punctuation">.</span>std<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">)</span>
+all_fea<span class="token punctuation">[</span>num_fea<span class="token punctuation">]</span> <span class="token operator">=</span> all_fea<span class="token punctuation">[</span>num_fea<span class="token punctuation">]</span><span class="token punctuation">.</span>fillna<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span></code></pre>
+
+<p>这里对 DataFrame 的操作有些复杂, 我们逐步分析:  </p>
+<ul>
+<li><code>all_fea.dtypes != &#39;object&#39;</code> 这里是检测所有数据是否为 ‘object’ (即是否为数值类型) . 其返回值为 <strong>Series</strong> . 其中 data 为 <code>True</code> 或 <code>False</code> .  </li>
+<li><code>all_fea.dtypes[all_fea.dtypes != &#39;object&#39;]</code> 返回所有 <strong>数值类型</strong> 的数据, 其 data 为 数据类型.  </li>
+<li><code>all_fea.dtypes[all_fea.dtypes != &#39;object&#39;].index</code> 取所有 <strong>数值类型</strong> 的数据的 <strong>index</strong> .</li>
+</ul>
+<p><code>print</code> 一下就能看出来:  </p>
+<pre class="language-python" data-language="python"><code class="language-python">Index<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'MSSubClass'</span><span class="token punctuation">,</span> <span class="token string">'LotFrontage'</span><span class="token punctuation">,</span> <span class="token string">'LotArea'</span><span class="token punctuation">,</span> <span class="token string">'OverallQual'</span><span class="token punctuation">,</span> <span class="token string">'OverallCond'</span><span class="token punctuation">,</span>
+       <span class="token string">'YearBuilt'</span><span class="token punctuation">,</span> <span class="token string">'YearRemodAdd'</span><span class="token punctuation">,</span> <span class="token string">'MasVnrArea'</span><span class="token punctuation">,</span> <span class="token string">'BsmtFinSF1'</span><span class="token punctuation">,</span> <span class="token string">'BsmtFinSF2'</span><span class="token punctuation">,</span>
+       <span class="token string">'BsmtUnfSF'</span><span class="token punctuation">,</span> <span class="token string">'TotalBsmtSF'</span><span class="token punctuation">,</span> <span class="token string">'1stFlrSF'</span><span class="token punctuation">,</span> <span class="token string">'2ndFlrSF'</span><span class="token punctuation">,</span> <span class="token string">'LowQualFinSF'</span><span class="token punctuation">,</span>
+       <span class="token string">'GrLivArea'</span><span class="token punctuation">,</span> <span class="token string">'BsmtFullBath'</span><span class="token punctuation">,</span> <span class="token string">'BsmtHalfBath'</span><span class="token punctuation">,</span> <span class="token string">'FullBath'</span><span class="token punctuation">,</span> <span class="token string">'HalfBath'</span><span class="token punctuation">,</span>
+       <span class="token string">'BedroomAbvGr'</span><span class="token punctuation">,</span> <span class="token string">'KitchenAbvGr'</span><span class="token punctuation">,</span> <span class="token string">'TotRmsAbvGrd'</span><span class="token punctuation">,</span> <span class="token string">'Fireplaces'</span><span class="token punctuation">,</span>
+       <span class="token string">'GarageYrBlt'</span><span class="token punctuation">,</span> <span class="token string">'GarageCars'</span><span class="token punctuation">,</span> <span class="token string">'GarageArea'</span><span class="token punctuation">,</span> <span class="token string">'WoodDeckSF'</span><span class="token punctuation">,</span> <span class="token string">'OpenPorchSF'</span><span class="token punctuation">,</span>
+       <span class="token string">'EnclosedPorch'</span><span class="token punctuation">,</span> <span class="token string">'3SsnPorch'</span><span class="token punctuation">,</span> <span class="token string">'ScreenPorch'</span><span class="token punctuation">,</span> <span class="token string">'PoolArea'</span><span class="token punctuation">,</span> <span class="token string">'MiscVal'</span><span class="token punctuation">,</span>
+       <span class="token string">'MoSold'</span><span class="token punctuation">,</span> <span class="token string">'YrSold'</span><span class="token punctuation">,</span> <span class="token string">'SalePrice'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      dtype<span class="token operator">=</span><span class="token string">'object'</span><span class="token punctuation">)</span></code></pre>
+
+<p>之后是:  </p>
+<ul>
+<li><code>all_fea[num_fea] = all_fea[num_fea].apply(lambda x: (x - x.mean()) / (x.std()))</code> Pandas 中, <code>DataFrame.apply(func, axis=0, raw=False, result_type=None, args=(), **kwargs)</code>, 所以参数我们需要写一个函数, 这里就使用了 Python 的 lambda 函数. 此函数指: 每一个数值减去平均值, 然后比上标准差. 这就完成了 <strong>非缺失数据</strong> 的标准化.  </li>
+<li><code>all_fea[num_fea] = all_fea[num_fea].fillna(0)</code> 利用 <code>fillna</code> 函数将 <strong>缺省值</strong> 补充为 <strong>0</strong> , 因为上一步已经将其他数据标准化, 缺省指取平均值的话, 就可以直接补为 0.</li>
+</ul>
+<p>接下来处理 <strong>离散值</strong>:  </p>
+<pre class="language-python" data-language="python"><code class="language-python">all_fea <span class="token operator">=</span> pd<span class="token punctuation">.</span>get_dummies<span class="token punctuation">(</span>all_fea<span class="token punctuation">,</span> dummy_na<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span></code></pre>
+
+<p>函数 <code>pd.get_dummies</code> </p>
+<!-- flag of hidden posts --></div></section><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><span class="icon iconify" data-icon="ri:money-dollar-circle-line"></span></span><div id="reward-comment">我很可爱，请给我钱</div><div id="qr" style="display:none;"><div style="display:inline-block"><a href="/img/alipay.jpg"><img loading="lazy" src="/img/alipay.jpg" alt="支付宝" title="支付宝"></a><div><span style="color:#00A3EE"><span class="icon iconify" data-icon="ri:alipay-line"></span></span></div></div><div style="display:inline-block"><a href="/img/wechatpay.png"><img loading="lazy" src="/img/wechatpay.png" alt="微信支付" title="微信支付"></a><div><span style="color:#2DC100"><span class="icon iconify" data-icon="ri:qq-line"></span></span></div></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>紅葉</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="http://jk-momiji.com/DeepLearning/02/" title="DeepLearn 学习笔记 - 02">http://jk-momiji.com/DeepLearning/02/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><span class="icon iconify" data-icon="ri:creative-commons-line"></span><span class="icon iconify" data-icon="ri:creative-commons-by-line"></span><span class="icon iconify" data-icon="ri:creative-commons-nc-line"></span><span class="icon iconify" data-icon="ri:creative-commons-sa-line"></span></a> 许可协议。</li></ul></article></div><div class="hty-card" id="comment"></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2022 </span><span class="with-love" id="animate"><span class="icon iconify" data-icon="ri:cloud-line"></span></span><span class="author"> 紅葉</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v6.0.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.10.6</span></div><div id="busuanzi"><span id="busuanzi_container_site_uv" title="总访客量"><span><span class="icon iconify" data-icon="ri:user-line"></span></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><span class="icon iconify" data-icon="ri:eye-line"></span></span><span id="busuanzi_value_site_pv"></span></span><script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></footer></div><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><span class="icon iconify" data-icon="ri:arrow-up-s-line"></span><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><script src="https://fastly.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script><script>const images = [...document.querySelectorAll('.markdown-body img')]
+mediumZoom(images)</script><style>.medium-zoom-image {
+  z-index: 99;
+}</style></body></html>

@@ -1,0 +1,490 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="紅葉"><meta name="copyright" content="紅葉"><meta name="generator" content="Hexo 6.0.0"><meta name="theme" content="hexo-theme-yun"><title>Matplotlib笔记 | 紅葉の森</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/star-markdown-css@0.3.3/dist/yun/yun-markdown.min.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/prism-theme-vars/base.css"><script src="https://fastly.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>function initScrollReveal() {
+  [".post-card",".markdown-body img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+}
+document.addEventListener("DOMContentLoaded", initScrollReveal);
+document.addEventListener("pjax:success", initScrollReveal);
+</script><link rel="icon" type="image/png" href="/img/favicon.png"><link rel="mask-icon" href="/img/favicon.png" color="#0078E7"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fastly.jsdelivr.net/npm/" crossorigin><script id="yun-config">
+    window.Yun = {}
+    window.CONFIG = {"hostname":"jk-momiji.com","root":"/","title":"紅葉の森","version":"1.10.6","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.yunyoujun.cn/img/avatar/none.jpg","say":{"api":"https://el-bot-api.vercel.app/api/words/young"},"fireworks":{"colors":null},"vendors":{"host":"https://fastly.jsdelivr.net/npm/","darken":"https://fastly.jsdelivr.net/npm/darken@1.5.0"}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/hexo-theme-yun.js" type="module"></script><script>(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();</script><meta name="description" content="本文将介绍一些常用的 Matplotlib 的绘图方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Matplotlib笔记">
+<meta property="og:url" content="http://jk-momiji.com/Note-of-Matplotlib/">
+<meta property="og:site_name" content="紅葉の森">
+<meta property="og:description" content="本文将介绍一些常用的 Matplotlib 的绘图方法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-27T03:49:21.000Z">
+<meta property="article:modified_time" content="2022-08-23T09:37:17.186Z">
+<meta property="article:author" content="紅葉">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="数据分析">
+<meta property="article:tag" content="数据可视化">
+<meta name="twitter:card" content="summary"><script>(function() {
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const setting = localStorage.getItem('darken-mode') || 'auto'
+  if (setting === 'dark' || (prefersDark && setting !== 'light'))
+    document.documentElement.classList.toggle('dark', true)
+})()</script></head><body><script src="https://code.iconify.design/2/2.1.1/iconify.min.js"></script><script>// Define global variable
+IconifyProviders = {
+  // Empty prefix: overwrite default API provider configuration
+  '': {
+    // Use custom API first, use Iconify public API as backup
+    resources: [
+        'https://api.iconify.design',
+    ],
+    // Wait for 1 second before switching API hosts
+    rotate: 1000,
+  },
+};</script><script defer src="https://fastly.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><span class="icon iconify" data-icon="ri:list-ordered"></span></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><span class="icon iconify" data-icon="ri:passport-line"></span></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="紅葉"><img width="96" loading="lazy" src="/img/avatar.png" alt="紅葉"><span class="site-author-status" title="努力提升">📖</span></a><div class="site-author-name"><a href="/about/">紅葉</a></div><span class="site-name">紅葉の森</span><sub class="site-subtitle">记录每一个思想的火花</sub><div class="site-description">Cogito, ergo sum.</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:home-4-line"></span></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:archive-line"></span></span><span class="site-state-item-count">23</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:folder-2-line"></span></span><span class="site-state-item-count">7</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="site-state-item-count">29</span></a></div><a class="site-state-item hty-icon-button" href="/about/#comment" title="留言板"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:clipboard-line"></span></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><span class="icon iconify" data-icon="ri:rss-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Jk-Cheung" title="GitHub" target="_blank" style="color:#6e5494"><span class="icon iconify" data-icon="ri:github-line"></span></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:jk.momiji1230@gmail.com" title="E-Mail" target="_blank" style="color:#8E71C1"><span class="icon iconify" data-icon="ri:mail-line"></span></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="我的小伙伴们" style="color:dodgerblue"><span class="icon iconify" data-icon="ri:genderless-line"></span></a><a class="links-item hty-icon-button" href="/resources/" title="资源" style="color:green"><span class="icon iconify" data-icon="ri:cloud-line"></span></a><a class="links-item hty-icon-button" href="/girls/" title="喜欢的女孩子" style="color:hotpink"><span class="icon iconify" data-icon="ri:women-line"></span></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><span class="icon iconify" data-icon="ri:contrast-2-line"></span></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%BC%E5%85%A5%E4%B8%8E%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">导入与基本设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E7%89%87%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">图片设置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E4%BE%8B%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.1.</span> <span class="toc-text">图例设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%B9%E9%87%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E9%85%8D%E7%BD%AE"><span class="toc-number">2.2.</span> <span class="toc-text">批量自定义配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E7%BB%98%E5%9B%BE%E9%A3%8E%E6%A0%BC"><span class="toc-number">2.3.</span> <span class="toc-text">设置绘图风格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E6%AC%A1%E5%88%BB%E5%BA%A6%E7%BA%BF"><span class="toc-number">2.4.</span> <span class="toc-text">主次刻度线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E6%A0%BC%E7%BA%BF"><span class="toc-number">2.5.</span> <span class="toc-text">网格线</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E7%BB%B4%E7%BB%98%E5%9B%BE"><span class="toc-number">3.</span> <span class="toc-text">二维绘图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%98%E7%BA%BF-x2F-%E7%82%B9%E5%9B%BE"><span class="toc-number">3.1.</span> <span class="toc-text">折线&#x2F;点图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%A3%E7%82%B9%E5%9B%BE"><span class="toc-number">3.2.</span> <span class="toc-text">散点图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%E5%9B%BE"><span class="toc-number">4.</span> <span class="toc-text">统计分析图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%B1%E7%8A%B6%E5%9B%BE"><span class="toc-number">4.1.</span> <span class="toc-text">柱状图</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AB%96%E7%9B%B4%E6%9F%B1%E7%8A%B6%E5%9B%BE"><span class="toc-number">4.1.1.</span> <span class="toc-text">竖直柱状图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B0%B4%E5%B9%B3%E6%9F%B1%E7%8A%B6%E5%9B%BE"><span class="toc-number">4.1.2.</span> <span class="toc-text">水平柱状图</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B4%E6%96%B9%E5%9B%BE"><span class="toc-number">4.2.</span> <span class="toc-text">直方图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A5%BC%E5%9B%BE"><span class="toc-number">4.3.</span> <span class="toc-text">饼图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%B1%E7%BA%BF%E5%9B%BE"><span class="toc-number">4.4.</span> <span class="toc-text">箱线图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%8E%E5%8F%B6%E5%9B%BE"><span class="toc-number">4.5.</span> <span class="toc-text">茎叶图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E6%8F%90%E7%90%B4%E5%9B%BE"><span class="toc-number">4.6.</span> <span class="toc-text">小提琴图</span></a></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="http://jk-momiji.com/Note-of-Matplotlib/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="紅葉"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="紅葉の森"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Matplotlib笔记</h1><div class="post-meta"><div class="post-time"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-line"></span></span> <time title="创建时间：2022-07-27 11:49:21" itemprop="dateCreated datePublished" datetime="2022-07-27T11:49:21+08:00">2022-07-27</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-2-line"></span></span> <time title="修改时间：2022-08-23 17:37:17" itemprop="dateModified" datetime="2022-08-23T17:37:17+08:00">2022-08-23</time></div><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><span class="icon iconify" data-icon="ri:eye-line"></span> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><span class="icon iconify" data-icon="ri:folder-line"></span></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">学习笔记</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/Python/" style="--text-color:#3776ab"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">Python</span></a><a class="tag-item" href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">数据分析</span></a><a class="tag-item" href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">数据可视化</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><p>本文将介绍一些常用的 Matplotlib 的绘图方法。</p>
+<span id="more"></span>
+
+<h2 id="导入与基本设置"><a href="#导入与基本设置" class="headerlink" title="导入与基本设置"></a>导入与基本设置</h2><pre class="language-python" data-language="python"><code class="language-python"><span class="token operator">%</span>matplotlib inline  <span class="token comment"># 设置图像内嵌显示于 Jupyter Notebook 中</span>
+<span class="token operator">%</span>config InlineBackend<span class="token punctuation">.</span>figure_format <span class="token operator">=</span> <span class="token string">'svg'</span>  <span class="token comment"># 设置图片为 svg 矢量图格式</span>
+<span class="token keyword">from</span> matplotlib <span class="token keyword">import</span> pyplot <span class="token keyword">as</span> plt  <span class="token comment"># 提供常用二维图绘制的 sublibrary</span></code></pre>
+
+<h2 id="图片设置"><a href="#图片设置" class="headerlink" title="图片设置"></a>图片设置</h2><h3 id="图例设置"><a href="#图例设置" class="headerlink" title="图例设置"></a>图例设置</h3><pre class="language-python" data-language="python"><code class="language-python">plt<span class="token punctuation">.</span>legend<span class="token punctuation">(</span>loc<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>  <span class="token comment"># 设置图例的位置，loc=0 代表自动选择最佳位置</span></code></pre>
+
+<hr>
+<table>
+<thead>
+<tr>
+<th align="center">loc 编号</th>
+<th align="center">loc 字符串</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0</td>
+<td align="center">best</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">upper right</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">upper left</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">lower left</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">lower right</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">right</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">center left</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center">center right</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="center">lower center</td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="center">upper center</td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="center">center</td>
+</tr>
+</tbody></table>
+<p>也可以用一个数组 (x0, y0) 来确定位置，图片的左下角为 (0, 0)，右上角为 (1, 1)。</p>
+<pre class="language-python" data-language="python"><code class="language-python">plt<span class="token punctuation">.</span>legend<span class="token punctuation">(</span>bbox_to_anchor<span class="token operator">=</span><span class="token punctuation">(</span>x0<span class="token punctuation">,</span> y0<span class="token punctuation">,</span> width<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> height<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> loc<span class="token operator">=</span><span class="token number">9</span><span class="token punctuation">)</span></code></pre>
+
+<p>对于 (x0, y0)，图片的左下角为 (0, 0)，右上角为 (1, 1)，当 <code>width=0， height=0</code> （缺省）时，将图例中和 <code>loc</code> 参数相对应的那一部分与 (x0, y0) 重合，例如 <code>x0=1, y0=1, loc=2</code> 时代表图例的左上角和图的右上角重合。</p>
+<p>当 <code>width </code>和 <code>height</code> 不等于 0 时，以 <code>x0, y0, width, height</code> 这四个参数创建一个矩形，将图例放在该矩形中与 <code>loc</code> 参数相对应的部分。</p>
+<p>最常用的还是只设置 x0, y0 的情况。</p>
+<h3 id="批量自定义配置"><a href="#批量自定义配置" class="headerlink" title="批量自定义配置"></a>批量自定义配置</h3><p>Matplotlib 可通过自定义参数来实现批量配置，相关函数为 <code>plt.rcParams</code>，其全称为「runtime configuration Parameters」，其是一个字典形式，其中常用的设置如下</p>
+<pre class="language-python" data-language="python"><code class="language-python">plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">[</span><span class="token string">'font.sans-serif'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'SimSun'</span>  <span class="token comment"># 设置字体为宋体</span>
+plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">[</span><span class="token string">"axes.unicode_minus"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">False</span>  <span class="token comment"># 设置不使用 unicode 的负号，解决负号乱码</span>
+plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">[</span><span class="token string">'figure.figsize'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">5.0</span><span class="token punctuation">,</span> <span class="token number">4.0</span><span class="token punctuation">)</span>  <span class="token comment"># 设置图像最大范围</span>
+plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">[</span><span class="token string">'lines.linestyle'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'-.'</span>  <span class="token comment"># 设置线条样式</span>
+plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">[</span><span class="token string">'lines.linewidth'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">3</span>  <span class="token comment"># 设置线条宽度</span></code></pre>
+
+<p>可以将该函数理解为设置默认值，防止对图像进行多次重复的设置。</p>
+<h3 id="设置绘图风格"><a href="#设置绘图风格" class="headerlink" title="设置绘图风格"></a>设置绘图风格</h3><p>Matplotlib 可使用函数 <code>plt.style()</code> 来改变绘图风格，其常用命令如下</p>
+<pre class="language-python" data-language="python"><code class="language-python">plt<span class="token punctuation">.</span>style<span class="token punctuation">.</span>available  <span class="token comment"># 查看可用风格</span>
+plt<span class="token punctuation">.</span>style<span class="token punctuation">.</span>use<span class="token punctuation">(</span><span class="token string">'seaborn'</span><span class="token punctuation">)</span>  <span class="token comment"># 使用指定风格，此处为 'seaborn' 风格</span></code></pre>
+
+<h3 id="主次刻度线"><a href="#主次刻度线" class="headerlink" title="主次刻度线"></a>主次刻度线</h3><p>一个图中可以存在两个刻度线，即主刻度线和次刻度线。使用命令 <code>plt.minorticks_on()</code> 和 <code>plt.minorticks_off()</code> 两个函数即可进行开启与关闭。对于主次刻度线的设置可使用 <code>plt.tick_params(axis=&#39;both&#39;, **kwargs)</code> 函数。其中部分常用参数如下</p>
+<ul>
+<li><code>axis: &#123;&#39;x&#39;, &#39;y&#39;, &#39;both&#39;&#125;</code>：设置的轴，默认为 <code>&#39;both&#39;</code>；</li>
+<li><code>reset: bool</code>：默认为 <code>False</code>，确定在设置前是否恢复默认设置；</li>
+<li><code>which: &#123;&#39;major&#39;, &#39;minor&#39;, &#39;both&#39;&#125;</code>：设置的尺度，默认为 <code>&#39;major&#39;</code>，<code>&#39;major&#39;</code> 表示显示主刻度线，<code>&#39;minor&#39;</code> 表示显示次刻度线；</li>
+<li><code>direction: &#123;&#39;in&#39;, &#39;out&#39;, &#39;inout&#39;&#125;</code>：设置刻度线的位置在坐标轴内、外或者两边；</li>
+<li><code>length, width: float</code>：设置刻度线的长与宽；</li>
+<li><code>color: color</code>：设置刻度线的颜色；</li>
+<li><code>bottom, top, left, right: bool</code>：在各方向上设置是否显示刻度线；</li>
+<li><code>labelbottom, labeltop, labelleft, labelright: bool</code>：在各方向上设置是否显示刻度值；</li>
+</ul>
+<h3 id="网格线"><a href="#网格线" class="headerlink" title="网格线"></a>网格线</h3><p>如果想要在图片中显示网格，可以使用 <code>grid()</code> 函数，其命令参数为</p>
+<pre class="language-python" data-language="python"><code class="language-python">grid<span class="token punctuation">(</span>b<span class="token operator">=</span>Ture<span class="token punctuation">,</span> which<span class="token punctuation">,</span> axis<span class="token punctuation">,</span> color<span class="token punctuation">,</span> linestyle<span class="token punctuation">,</span> linewidth<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span></code></pre>
+
+<p>其中参数作用如下</p>
+<ul>
+<li><code>b</code>：是否显示网格线，默认为<code>None</code>。若设置 <code>**kwargs</code> 参数则值为 <code>True</code>；</li>
+<li><code>which</code>：网格线显示的尺度，取值范围  <code>&#123;&#39;major&#39;, &#39;minor&#39;, &#39;both&#39;&#125;</code>，默认为 <code>&#39;major&#39;</code>，<code>&#39;major&#39;</code> 表示显示主刻度线，<code>&#39;minor&#39;</code> 表示显示次刻度线；</li>
+<li><code>axis</code>：网格线显示的轴，取值范围为 <code>&#123;&#39;x&#39;, &#39;y&#39;, &#39;both&#39;&#125;</code>，默认为 <code>&#39;both&#39;</code>；</li>
+<li><code>**kwargs</code>：<code>Line2D</code> 线条对象属性，即 <code>plt.plot()</code> 中的 <code>color</code> 等参数。</li>
+</ul>
+<p>可通过如下代码实现实线主刻度线网格，点线次刻度线网格：</p>
+<pre class="language-python" data-language="python"><code class="language-python">plt<span class="token punctuation">.</span>minorticks_on<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>grid<span class="token punctuation">(</span>which<span class="token operator">=</span><span class="token string">'major'</span><span class="token punctuation">,</span> linestyle<span class="token operator">=</span><span class="token string">'-'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>grid<span class="token punctuation">(</span>which<span class="token operator">=</span><span class="token string">'minor'</span><span class="token punctuation">,</span> linestyle<span class="token operator">=</span><span class="token string">':'</span><span class="token punctuation">)</span></code></pre>
+
+<h2 id="二维绘图"><a href="#二维绘图" class="headerlink" title="二维绘图"></a>二维绘图</h2><h3 id="折线-x2F-点图"><a href="#折线-x2F-点图" class="headerlink" title="折线&#x2F;点图"></a>折线&#x2F;点图</h3><pre class="language-python" data-language="python"><code class="language-python">plt<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span>  <span class="token comment"># 以数组 x 和 y 绘制点图</span>
+plt<span class="token punctuation">.</span>xlim<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 设置 x 轴的范围</span>
+plt<span class="token punctuation">.</span>ylim<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 设置 y 轴的范围</span>
+plt<span class="token punctuation">.</span>xticks<span class="token punctuation">(</span>np<span class="token punctuation">.</span>arange<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">11</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 设置 x 轴显示的坐标</span>
+plt<span class="token punctuation">.</span>yticks<span class="token punctuation">(</span>np<span class="token punctuation">.</span>arange<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">11</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 设置 y 轴显示的坐标</span>
+plt<span class="token punctuation">.</span>xlabel<span class="token punctuation">(</span><span class="token string">'x'</span><span class="token punctuation">)</span>  <span class="token comment"># 设置 x 轴的标签为 x</span>
+plt<span class="token punctuation">.</span>ylabel<span class="token punctuation">(</span><span class="token string">'y'</span><span class="token punctuation">)</span>  <span class="token comment"># 设置 y 轴的标签为 y</span>
+plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">'x-y 图'</span><span class="token punctuation">)</span>  <span class="token comment"># 设置图片标题</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 显示图形，在这条代码前的所有绘图都是在同一张图上的</span></code></pre>
+
+<p>对于函数 <code>plt.plot(x, y)</code>，其常用参数为 <code>plt.plot(x, y, [fmt], label, linestyle, linewidth, marker, markersize)</code>，其中 <code>[fmt]</code> 是一个字符串，由三部分组成，<code>fmt = &#39;[color][marker][line]&#39;</code>，比如蓝色圆点实线就表示为 <code>bo-</code>，其中 <code>b</code> 为 blue 的缩写，<code>o</code> 为圆点的象形，<code>-</code> 为实线的象形。也对这三个属性进行单独赋值：<code>color=&#39;blue&#39;, marker=&#39;o&#39;, linestyle=&#39;-&#39;</code>。以下是 <code>Color</code> 常见参数</p>
+<table>
+<thead>
+<tr>
+<th align="center">Color 参数</th>
+<th align="center">代表颜色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">‘b’</td>
+<td align="center">‘blue’</td>
+</tr>
+<tr>
+<td align="center">‘r’</td>
+<td align="center">‘red’</td>
+</tr>
+<tr>
+<td align="center">‘g’</td>
+<td align="center">‘green’</td>
+</tr>
+<tr>
+<td align="center">‘c’</td>
+<td align="center">‘cyan’</td>
+</tr>
+<tr>
+<td align="center">‘m’</td>
+<td align="center">‘megenta’</td>
+</tr>
+<tr>
+<td align="center">‘y’</td>
+<td align="center">‘yellow’</td>
+</tr>
+<tr>
+<td align="center">‘k’</td>
+<td align="center">‘black’</td>
+</tr>
+<tr>
+<td align="center">‘w’</td>
+<td align="center">‘white’</td>
+</tr>
+</tbody></table>
+<p>以下是 <code>Marker</code> 常见参数</p>
+<table>
+<thead>
+<tr>
+<th align="center">marker 参数</th>
+<th align="center">代表 Marker</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">‘.’</td>
+<td align="center">‘point’</td>
+</tr>
+<tr>
+<td align="center">‘,’</td>
+<td align="center">‘pixel’</td>
+</tr>
+<tr>
+<td align="center">‘o’</td>
+<td align="center">‘circle’</td>
+</tr>
+<tr>
+<td align="center">‘v’</td>
+<td align="center">‘triangle_down’</td>
+</tr>
+<tr>
+<td align="center">‘^’</td>
+<td align="center">‘triangle_up’</td>
+</tr>
+<tr>
+<td align="center">‘&lt;’</td>
+<td align="center">‘triangle_left’</td>
+</tr>
+<tr>
+<td align="center">‘&gt;’</td>
+<td align="center">‘triangle_right’</td>
+</tr>
+<tr>
+<td align="center">‘1’</td>
+<td align="center">‘tri_down’</td>
+</tr>
+<tr>
+<td align="center">‘2’</td>
+<td align="center">‘tri_up’</td>
+</tr>
+<tr>
+<td align="center">‘3’</td>
+<td align="center">‘tri_left’</td>
+</tr>
+<tr>
+<td align="center">‘4’</td>
+<td align="center">‘tri_right’</td>
+</tr>
+<tr>
+<td align="center">‘s’</td>
+<td align="center">‘square’</td>
+</tr>
+<tr>
+<td align="center">‘p’</td>
+<td align="center">‘pentagon’</td>
+</tr>
+<tr>
+<td align="center">‘*’</td>
+<td align="center">‘star’</td>
+</tr>
+<tr>
+<td align="center">‘h’</td>
+<td align="center">‘hexagon1’</td>
+</tr>
+<tr>
+<td align="center">‘H’</td>
+<td align="center">‘hexagon2’</td>
+</tr>
+<tr>
+<td align="center">‘+’</td>
+<td align="center">‘plus’</td>
+</tr>
+<tr>
+<td align="center">‘x’</td>
+<td align="center">‘x’</td>
+</tr>
+<tr>
+<td align="center">‘D’</td>
+<td align="center">‘diamond’</td>
+</tr>
+<tr>
+<td align="center">‘d’</td>
+<td align="center">‘thin_diamond’</td>
+</tr>
+<tr>
+<td align="center">‘|’</td>
+<td align="center">‘vline’</td>
+</tr>
+<tr>
+<td align="center">‘_’</td>
+<td align="center">‘hline’</td>
+</tr>
+</tbody></table>
+<p>以下是 Line 常见参数</p>
+<table>
+<thead>
+<tr>
+<th align="center">Line 参数</th>
+<th align="center">代表Line</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">‘-‘</td>
+<td align="center">‘solid’</td>
+</tr>
+<tr>
+<td align="center">‘–’</td>
+<td align="center">‘dashed’</td>
+</tr>
+<tr>
+<td align="center">‘-.’</td>
+<td align="center">‘dashdot’</td>
+</tr>
+<tr>
+<td align="center">‘:’</td>
+<td align="center">‘dotted’</td>
+</tr>
+</tbody></table>
+<p>在一个 plot 中，可以绘制多个点图，通过设置 <code>label</code> 标签以及 <code>plt.legend()</code> 命令来进行区分。</p>
+<pre class="language-python" data-language="python"><code class="language-python">plt<span class="token punctuation">.</span>minorticks_on<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>grid<span class="token punctuation">(</span>which<span class="token operator">=</span><span class="token string">'major'</span><span class="token punctuation">,</span> linestyle<span class="token operator">=</span><span class="token string">'-'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>grid<span class="token punctuation">(</span>which<span class="token operator">=</span><span class="token string">'minor'</span><span class="token punctuation">,</span> linestyle<span class="token operator">=</span><span class="token string">':'</span><span class="token punctuation">)</span></code></pre>
+
+<h3 id="散点图"><a href="#散点图" class="headerlink" title="散点图"></a>散点图</h3><p>Matpltlib 使用 <code>plt.scatter()</code> 函数来实现散点图的绘制，其具体参数如下</p>
+<pre class="language-python" data-language="python"><code class="language-python">plt<span class="token punctuation">.</span>scatter<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> s<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> c<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> marker<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> norm<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> vmin<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> vmax<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> linewidths<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> <span class="token operator">*</span><span class="token punctuation">,</span> edgecolors<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> plotnonfinite<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> data<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span></code></pre>
+
+<ul>
+<li><code>x, y: ArrayLike</code>：绘图坐标数据；</li>
+<li><code>s: float, ArrayLike</code>：点的大小，默认 <code>20</code>，为 <code>float</code> 时为所有点设置相同大小，为 <code>ArrayLike</code> 类型时为每个点对应设置大小；</li>
+<li><code>c: str, ArrayLike</code>：点的颜色，默认为 <code>&#39;b&#39;</code>，同 <code>s</code> 可为 <code>ArrayLike</code> 类型。</li>
+<li><code>cmap, norm</code>：一般忽略，高级颜色设置；</li>
+<li><code>vmin, vmax</code>：一般忽略，亮度设置；</li>
+<li><code>alpha: float</code>：透明度设置，0-1 之间，默认为 None，即不透明；</li>
+<li><code>linewidths: float, ArrayLike</code>：标记点的长度（半径）设置；</li>
+<li><code>edgecolor: &#123;&#39;face&#39;, &#39;none&#39;, None&#125;</code>：边缘颜色设置，一般忽略；</li>
+<li><code>plotnonfinite: bool</code>：设置是否使用非有限的 <code>c</code> (inf, -inf, nan) 进行图像的绘制。</li>
+</ul>
+<h2 id="统计分析图"><a href="#统计分析图" class="headerlink" title="统计分析图"></a>统计分析图</h2><h3 id="柱状图"><a href="#柱状图" class="headerlink" title="柱状图"></a>柱状图</h3><h4 id="竖直柱状图"><a href="#竖直柱状图" class="headerlink" title="竖直柱状图"></a>竖直柱状图</h4><p>Matplotlib 使用如下函数实现竖直柱状图的绘制，其常用参数如下</p>
+<pre class="language-python" data-language="python"><code class="language-python">matplotlib<span class="token punctuation">.</span>pyplot<span class="token punctuation">.</span>bar<span class="token punctuation">(</span>x<span class="token punctuation">,</span> height<span class="token punctuation">,</span> width<span class="token operator">=</span><span class="token number">0.8</span><span class="token punctuation">,</span> bottom<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> <span class="token operator">*</span><span class="token punctuation">,</span> align<span class="token operator">=</span><span class="token string">'center'</span><span class="token punctuation">,</span> data<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span></code></pre>
+
+<ul>
+<li><code>x, hight: ArrayLike</code>：x 轴的位置序列与 y 轴的数值（高度）序列；</li>
+<li><code>width: float, ArrayLike</code>：柱形的宽度，为 <code>float</code> 类型时为所有柱形设置，为 <code>ArrayLike</code> 时对应设置；</li>
+<li><code>bottom: float, ArrayLike</code>：柱形的底部所在高度，为 <code>float</code> 类型时为所有柱形设置，为 <code>ArrayLike</code> 时对应设置；</li>
+<li><code>aligh: &#123;&#39;center&#39;, &#39;edge&#39;&#125;</code>：柱形的对齐方式，默认为 <code>&#39;center&#39;</code>，即将柱形中心与 <code>x</code> 坐标对齐，若为 <code>&#39;edge&#39;</code> 则将偏左侧与 <code>x</code> 坐标对齐，如果想做到偏右侧则设置 <code>width</code> 为负值即可；</li>
+<li><code>alpha: float</code>：同散点图；</li>
+<li><code>color, edgecolor</code>：同散点图；</li>
+<li><code>label: ArrayLike</code>：柱形的标签，同 <code>plt.plot()</code>；</li>
+<li><code>lw: float</code>：边缘或线的宽度。</li>
+</ul>
+<p>如果想要绘制重合对比图，可以在同一图上同时绘制两柱状图，但是要注意遮挡问题，因此可将上层图像设置为部分透明，例如</p>
+<pre class="language-python" data-language="python"><code class="language-python">x <span class="token operator">=</span> np<span class="token punctuation">.</span>linspace<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span> <span class="token operator">*</span> np<span class="token punctuation">.</span>pi<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span>
+y <span class="token operator">=</span> np<span class="token punctuation">.</span>sin<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+z <span class="token operator">=</span> np<span class="token punctuation">.</span>cos<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>bar<span class="token punctuation">(</span>x<span class="token punctuation">,</span> z<span class="token punctuation">,</span> width<span class="token operator">=</span><span class="token number">0.7</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>bar<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> width<span class="token operator">=</span><span class="token number">0.7</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.7</span><span class="token punctuation">)</span>  <span class="token comment"># 上层图形</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+
+<p>但是如果想要两柱形并列显示，就需要进行如下设置</p>
+<pre class="language-python" data-language="python"><code class="language-python">x <span class="token operator">=</span> np<span class="token punctuation">.</span>linspace<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span> <span class="token operator">*</span> np<span class="token punctuation">.</span>pi<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span>
+y <span class="token operator">=</span> np<span class="token punctuation">.</span>sin<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+z <span class="token operator">=</span> np<span class="token punctuation">.</span>cos<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+bar_width <span class="token operator">=</span> <span class="token number">0.5</span>
+plt<span class="token punctuation">.</span>bar<span class="token punctuation">(</span>np<span class="token punctuation">.</span>arange<span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> z<span class="token punctuation">,</span> width<span class="token operator">=</span>bar_width<span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>bar<span class="token punctuation">(</span>np<span class="token punctuation">.</span>arange<span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> bar_width<span class="token punctuation">,</span> y<span class="token punctuation">,</span> width<span class="token operator">=</span>bar_width<span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.7</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+
+<p>将两个图的横坐标错开一个柱形的宽度。或者使用</p>
+<pre class="language-python" data-language="python"><code class="language-python">x <span class="token operator">=</span> np<span class="token punctuation">.</span>linspace<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span> <span class="token operator">*</span> np<span class="token punctuation">.</span>pi<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span>
+y <span class="token operator">=</span> np<span class="token punctuation">.</span>sin<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+z <span class="token operator">=</span> np<span class="token punctuation">.</span>cos<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+bar_width <span class="token operator">=</span> <span class="token number">0.3</span>
+plt<span class="token punctuation">.</span>bar<span class="token punctuation">(</span>x<span class="token punctuation">,</span> z<span class="token punctuation">,</span> width<span class="token operator">=</span>bar_width<span class="token punctuation">,</span> align<span class="token operator">=</span><span class="token string">'edge'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>bar<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> width<span class="token operator">=</span><span class="token operator">-</span>bar_width<span class="token punctuation">,</span> align<span class="token operator">=</span><span class="token string">'edge'</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.7</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+
+<p>利用 <code>aligh</code> 参数来进行设置</p>
+<h4 id="水平柱状图"><a href="#水平柱状图" class="headerlink" title="水平柱状图"></a>水平柱状图</h4><p>水平柱状图使用以下函数调用</p>
+<pre class="language-python" data-language="python"><code class="language-python">matplotlib<span class="token punctuation">.</span>pyplot<span class="token punctuation">.</span>barh<span class="token punctuation">(</span>y<span class="token punctuation">,</span> width<span class="token punctuation">,</span> height<span class="token operator">=</span><span class="token number">0.8</span><span class="token punctuation">,</span> left<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> <span class="token operator">*</span><span class="token punctuation">,</span> align<span class="token operator">=</span><span class="token string">'center'</span><span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span></code></pre>
+
+<p>其余与竖直类似。</p>
+<h3 id="直方图"><a href="#直方图" class="headerlink" title="直方图"></a>直方图</h3><p>Matplotlib 中使用如下函数实现绘制直方图</p>
+<pre class="language-python" data-language="python"><code class="language-python">plt<span class="token punctuation">.</span>hist<span class="token punctuation">(</span>x<span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> <span class="token builtin">range</span><span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> density<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> weights<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> cumulative<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> bottom<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> histtype<span class="token operator">=</span><span class="token string">'bar'</span><span class="token punctuation">,</span> align<span class="token operator">=</span><span class="token string">'mid'</span><span class="token punctuation">,</span> orientation<span class="token operator">=</span><span class="token string">'vertical'</span><span class="token punctuation">,</span> rwidth<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> log<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> color<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> label<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> stacked<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> <span class="token operator">*</span><span class="token punctuation">,</span> data<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span></code></pre>
+
+<ul>
+<li><code>x: ArrayLike</code>：需要绘制的原数据，可以是一个 <code>ArrayLike</code> 组成的 <code>ArrayLike</code>，形成不同的数据集，不同的数据集不需要长度相同；</li>
+<li><code>bins: int, str, ArrayLike</code>：如果为 <code>int</code> 类型，则指定箱子（即柱形）个数，默认为 10；<code>str</code> 类型不常见，请查看文档；如果为长度为 <code>l</code> 的 <code>ArrayLike</code> 类型，则将其中的数值作为分隔点形成 &#96;l-2 个左闭右开的区间以及一个（最后一个）闭区间；</li>
+<li><code>range: ArrayLike</code>：含有两个数值，分别对应上下界，若 <code>x</code> 中提供的数值在上下界之外则认为为异常值不进行考虑。在 <code>bins</code> 是一个 <code>ArrayLike</code> 时不起作用；</li>
+<li><code>density: bool</code>：是否显示占比，默认为 <code>False</code>；</li>
+<li><code>weight: ArrayLike</code>：<code>x</code> 的权重，如果 <code>density</code> 为 <code>True</code>，则此参数为归一化；</li>
+<li><code>cumulative: bool, -1</code>：是否累加，如果与 <code>density</code> 同为 <code>True</code> 则累加结果会归一化；如果该参数为 <code>-1</code> 则累加会取负；</li>
+<li><code>bottom: float, ArrayLike</code>：同柱状图；</li>
+<li><code>histtype: &#123;&#39;bar&#39;, &#39;barstacked&#39;, &#39;step&#39;, &#39;stepfilled&#39;&#125;</code>：直方图的样式，<code>&#39;bar&#39;</code>  为最基本的直方图，如果 <code>x</code> 输入了多个数据集，则将并列显示；<code>barstacked</code> 在多个数据集时会将它们进行堆叠；<code>step</code> 以线图进行显示；<code>stepfilled</code> 则将线图进行填充；</li>
+<li><code>align: &#123;&#39;left&#39;, &#39;mid&#39;, &#39;right&#39;&#125;</code>：类似柱状图；</li>
+<li><code>orientation: &#123;&#39;vertical&#39;, &#39;horizontal&#39;&#125;</code>：设置显示方向，类似 <code>plt.bar()</code> 与 <code>plt.barh()</code>；</li>
+<li><code>rwidth: float, None</code>：柱形的宽度参数，以 <code>width</code> 为标准，默认为 <code>None</code>，若 <code>histtype</code> 为 <code>step</code> 或 <code>stepfilled</code> 则忽略此参数；</li>
+<li><code>log: bool</code>：设置对数刻度，默认为 <code>False</code>；</li>
+<li><code>color: color, ArrayLike</code>：同柱状图；</li>
+<li><code>label: str, None</code>：直方图的标签；</li>
+<li><code>stacked: bool</code>：是否堆叠。</li>
+</ul>
+<h3 id="饼图"><a href="#饼图" class="headerlink" title="饼图"></a>饼图</h3><p>Matplotlib 中使用如下函数实现绘制饼图</p>
+<pre class="language-python" data-language="python"><code class="language-python">plt<span class="token punctuation">.</span>pie<span class="token punctuation">(</span>x<span class="token punctuation">,</span> explode<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> labels<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> colors<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> autopct<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> pctdistance<span class="token operator">=</span><span class="token number">0.6</span><span class="token punctuation">,</span> shadow<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> labeldistance<span class="token operator">=</span><span class="token number">1.1</span><span class="token punctuation">,</span> startangle<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> radius<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> counterclock<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> wedgeprops<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> textprops<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> center<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> frame<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> rotatelabels<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> <span class="token operator">*</span><span class="token punctuation">,</span> normalize<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> data<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span></code></pre>
+
+<ul>
+<li><code>x: ArrayLike</code>：同直方图；</li>
+<li><code>explode: ArrayLike</code>：离心距离；</li>
+<li><code>labels: ArrayLike</code>：每一部分的标签；</li>
+<li><code>color: ArrayLike</code>：每一部分的颜色，默认为 <code>None</code> 时使用现在设置的颜色环；</li>
+<li><code>autopct: str, callable</code>：自动显示每部分所占百分比，默认为 <code>None</code> 时不显示，为 <code>str</code> 格式且非格式化字符串时则显示其中的文字，若为格式化字符串则显示对应格式的百分比；为 <code>callable</code> 时输出对应百分比的函数值；</li>
+<li><code>pctdistance: float</code>：<code>autopct</code> 文字离心距离，以一个半径为参考，默认为 <code>0.6</code>；</li>
+<li><code>shadow: bool</code>：是否显示阴影；</li>
+<li><code>normalize: bool</code>：是否将 <code>x</code> 归一化，默认为 <code>True</code>，若为 <code>False</code> 时 <code>sum(x) &lt; 1</code> 则绘制部分饼图，<code>sum(x) &gt; 1</code> 则会抛出异常；</li>
+<li><code>labeldistance: float</code>：<code>label</code> 文字的离心距离，类似 <code>pctdistance</code>；</li>
+<li><code>startangle: float</code>：开始绘制角度，默认为 <code>0</code>，即 x 轴正半轴；</li>
+<li><code>radius:float</code> ：饼图的半径；</li>
+<li><code>counterclock: bool</code>：绘制方向，默认为 <code>True</code> 时为逆时针；</li>
+<li><code>wedgeprops: dict</code>：饼图楔形具体参数，如 <code>wedgeprops=&#123;&#39;linewidth&#39;: 3&#125;</code> 设置楔形线宽为 <code>3</code>；</li>
+<li><code>textprops: dict</code>：饼图文字具体参数，类似 <code>wedgeprops</code>；</li>
+<li><code>center: ArrayLike</code>：饼图的圆心坐标；</li>
+<li><code>frame: bool</code>：是否绘制坐标轴；</li>
+<li><code>rotatelabels: bool</code>：是否旋转标签，默认为 <code>False</code>；</li>
+<li><code>data: indexable</code>：不清楚，但是没什么用。</li>
+</ul>
+<h3 id="箱线图"><a href="#箱线图" class="headerlink" title="箱线图"></a>箱线图</h3><p>Matplotlib 中使用如下函数实现绘制箱线图</p>
+<pre class="language-python" data-language="python"><code class="language-python">plt<span class="token punctuation">.</span>boxplot<span class="token punctuation">(</span>x<span class="token punctuation">,</span> notch<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> sym<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> vert<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> whis<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> positions<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> widths<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> patch_artist<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> bootstrap<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> usermedians<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> conf_intervals<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> meanline<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> showmeans<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> showcaps<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> showbox<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> showfliers<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> boxprops<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> labels<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> flierprops<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> medianprops<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> meanprops<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> capprops<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> whiskerprops<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> manage_ticks<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> autorange<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> zorder<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> <span class="token operator">*</span><span class="token punctuation">,</span> data<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span></code></pre>
+
+<ul>
+<li><code>x: ArrayLike</code>：数据；</li>
+<li><code>notch: bool</code>：是否以凹口形式展现箱线图；</li>
+<li><code>sym: str</code>：异常点的参数，类似 <code>plt.plot()</code> 中的 <code>[fmt]</code>；</li>
+<li><code>vert: bool</code>：是否需要将箱线图垂直摆放，默认为 <code>True</code>；</li>
+<li><code>whis: float, ArrayLike, str</code>：指定上下须与上下四分位的距离，如果为 <code>float</code> 类型，则设置离群值为范围外 <code>whis * IQR</code> 范围的数值，默认为 <code>1.5</code>，一般地可设置为 <code>3</code> 以寻找极端离群值；若为 <code>ArrayLike</code> 类型，则设置离群值为固定分位点，如 <code>[5, 95]</code> 设置离群值为 5 百分分位数与 95 百分分位数之外；若为 <code>str</code> 类型，则可设置其为 <code>range</code> 来强制不出现离群点；</li>
+<li><code>positions: ArrayLike</code>：设置箱线图的位置；</li>
+<li><code>widths: ArrayLike</code>：设置箱线图的宽度；</li>
+<li><code>patch_artist: bool</code>：设置箱体是否显示颜色，默认为 <code>False</code>；</li>
+<li><code>meanline: bool</code>：是否显示均值线，默认为 <code>False</code>；</li>
+<li><code>showmeans: bool</code>：是否显示均值，默认为 <code>False</code>；</li>
+<li><code>showcaps: bool</code>：是否显示箱线图顶端和末端的两条线，默认为 <code>True</code>；</li>
+<li><code>showbox: bool</code> ：是否显示箱线图的箱体，默认为 <code>True</code>；</li>
+<li><code>showfliers: bool</code>：是否显示异常值，默认为 <code>True</code>；</li>
+<li><code>boxprops: dict</code>：设置箱线图的属性，如 <code>boxprops = &#123;&#39;color&#39;:&#39;orangered&#39;,&#39;facecolor&#39;:&#39;pink&#39;&#125;</code> 设置线颜色为橙色，填充颜色为粉色；</li>
+<li><code>labels: ArrayLike</code>：为箱线图添加标签；</li>
+<li><code>filerprops: dict</code>：设置异常值的属性；</li>
+<li><code>medianprops: dict</code>：设置中位数的属性；</li>
+<li><code>meanprops: dict</code>：设置均值的属性；</li>
+<li><code>capprops: dict</code>：设置箱线图顶端和末端线条的属性；</li>
+<li><code>whiskerprops: dict</code>：设置须的属性。</li>
+</ul>
+<h3 id="茎叶图"><a href="#茎叶图" class="headerlink" title="茎叶图"></a>茎叶图</h3><p>Matplotlib 中使用如下函数实现绘制茎叶图</p>
+<pre class="language-python" data-language="python"><code class="language-python">stem<span class="token punctuation">(</span><span class="token operator">*</span>args<span class="token punctuation">,</span> linefmt<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> markerfmt<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> basefmt<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> bottom<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> label<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> use_line_collection<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> orientation<span class="token operator">=</span><span class="token string">'vertical'</span><span class="token punctuation">,</span> data<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span></code></pre>
+
+<ul>
+<li><code>locs: ArrayLike</code>：类似箱线图的 <code>positions</code> 参数；</li>
+<li><code>heads: ArrayLike</code>：对于垂直茎叶图，该参数即茎头的 y 值，对于水平茎叶图，该参数即茎头的 x 值；</li>
+<li><code>linefmt: str</code>：线的参数，类似 <code>plt.plot()</code> 中的 <code>[fmt]</code>；</li>
+<li><code>markerfmt: str</code>：点的参数，类似 <code>plt.plot()</code> 中的 <code>[fmt]</code>；</li>
+<li><code>basefmt: str</code>：基线的参数，类似 <code>plt.plot()</code> 中的 <code>[fmt]</code>；</li>
+<li><code>orientation: &#123;&#39;vertical&#39;, &#39;horizontal&#39;&#125;</code>：茎叶图的方向，默认为 <code>&#39;vertical&#39;</code>，</li>
+<li><code>bottom: float</code>：基线的位置，默认为 <code>0</code>；</li>
+<li><code>label: str</code>：图例中使用的标签；</li>
+<li><code>use_line_collection: bool</code>：未来可能被废弃；</li>
+<li><code>data: indexable</code>：不清楚，但是没什么用。</li>
+</ul>
+<h3 id="小提琴图"><a href="#小提琴图" class="headerlink" title="小提琴图"></a>小提琴图</h3><p>Matplotlib 中使用如下函数实现绘制茎叶图小提琴图</p>
+<pre class="language-python" data-language="python"><code class="language-python">plt<span class="token punctuation">.</span>violinplot<span class="token punctuation">(</span>dataset<span class="token punctuation">,</span> positions<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> vert<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> widths<span class="token operator">=</span><span class="token number">0.5</span><span class="token punctuation">,</span> showmeans<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> showextrema<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> showmedians<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> points<span class="token operator">=</span><span class="token number">100</span><span class="token punctuation">,</span> bw_method<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> <span class="token operator">*</span><span class="token punctuation">,</span> data<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span></code></pre>
+
+<ul>
+<li><code>dataset: ArrayLike</code>：数据；</li>
+<li><code>positions, vert, widths, showmeans</code>：类似箱线图；</li>
+<li><code>showextrema: bool</code>：是否显示最值，默认为 <code>Ture</code>；</li>
+<li><code>showmedians: bool</code>：是否显示中位数，默认为 <code>False</code>；</li>
+<li><code>points: int</code>：估计高斯核密度的点数，默认为 <code>100</code>；</li>
+<li><code>bw_method: str, scalar, callable</code>：估算带宽的方法。</li>
+</ul>
+</div></section><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><span class="icon iconify" data-icon="ri:money-dollar-circle-line"></span></span><div id="reward-comment">我很可爱，请给我钱</div><div id="qr" style="display:none;"><div style="display:inline-block"><a href="/img/alipay.jpg"><img loading="lazy" src="/img/alipay.jpg" alt="支付宝" title="支付宝"></a><div><span style="color:#00A3EE"><span class="icon iconify" data-icon="ri:alipay-line"></span></span></div></div><div style="display:inline-block"><a href="/img/wechatpay.png"><img loading="lazy" src="/img/wechatpay.png" alt="微信支付" title="微信支付"></a><div><span style="color:#2DC100"><span class="icon iconify" data-icon="ri:qq-line"></span></span></div></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>紅葉</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="http://jk-momiji.com/Note-of-Matplotlib/" title="Matplotlib笔记">http://jk-momiji.com/Note-of-Matplotlib/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><span class="icon iconify" data-icon="ri:creative-commons-line"></span><span class="icon iconify" data-icon="ri:creative-commons-by-line"></span><span class="icon iconify" data-icon="ri:creative-commons-nc-line"></span><span class="icon iconify" data-icon="ri:creative-commons-sa-line"></span></a> 许可协议。</li></ul></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/After-Reading-The-Rise-and-Fall-of-the-Third-Reich/02/" rel="prev" title="读『第三帝国的兴亡：纳粹德国史』有感（二）"><span class="icon iconify" data-icon="ri:arrow-left-s-line"></span><span class="post-nav-text">读『第三帝国的兴亡：纳粹德国史』有感（二）</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/My-Opinion-on-Liberty-and-Democracy/" rel="next" title="对自由与民主的拙见"><span class="post-nav-text">对自由与民主的拙见</span><span class="icon iconify" data-icon="ri:arrow-right-s-line"></span></a></div></div></div><div class="hty-card" id="comment"></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2022 </span><span class="with-love" id="animate"><span class="icon iconify" data-icon="ri:cloud-line"></span></span><span class="author"> 紅葉</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v6.0.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.10.6</span></div><div id="busuanzi"><span id="busuanzi_container_site_uv" title="总访客量"><span><span class="icon iconify" data-icon="ri:user-line"></span></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><span class="icon iconify" data-icon="ri:eye-line"></span></span><span id="busuanzi_value_site_pv"></span></span><script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></footer></div><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><span class="icon iconify" data-icon="ri:arrow-up-s-line"></span><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><script src="https://fastly.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script><script>const images = [...document.querySelectorAll('.markdown-body img')]
+mediumZoom(images)</script><style>.medium-zoom-image {
+  z-index: 99;
+}</style></body></html>
